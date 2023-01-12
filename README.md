@@ -1,2 +1,2 @@
 # Group-By-Project---FourthBrain-
-Uplift model and Recommended System
+Uplift model and Recommender System
