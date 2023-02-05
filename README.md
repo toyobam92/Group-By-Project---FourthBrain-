@@ -29,7 +29,9 @@ Uplift modeling is a specialized approach to marketing analysis that aims to est
 The repository is structured as follows:
 
 dat: contains the datasets that we will use for training and evaluating our models.
+
 nb:  contains the notebooks and source code for our Uplift machine learning models and any supporting functions.
+
 reports: contains presentations and technical reports that document our progress and findings.
 
 ### Getting Started
