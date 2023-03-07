@@ -21,7 +21,7 @@ plt.style.use('seaborn-pastel')
 
 
 def load_data():
-    return pd.read_csv('https://raw.githubusercontent.com/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv', sep = ',')
+    return pd.read_csv('dat/feature_eng_data.csv')
 
 
 def create_plot(df, col, plot_type):
