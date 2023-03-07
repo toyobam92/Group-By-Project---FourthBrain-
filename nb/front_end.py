@@ -125,17 +125,17 @@ def numerical_analysis():
             ax = create_plot(data, selected_col, plot_type)
             st.pyplot(ax.figure)
 
-  
 def campaign_results():
         st.write('Campaign Results')
         # Replace with the actual path to the MLflow model
-        model_uri = "../nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
+        model_uri = "https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
+        
         # Load the model from the run
         loaded_model = mlflow.sklearn.load_model(model_uri)
-
-        X_test_2 = pd.read_csv('../dat/X_test.csv')
-        y_test = pd.read_csv('../dat/y_test.csv')
-        trmnt_test = pd.read_csv('../dat/trmnt_test.csv')
+        
+        X_test_2 = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/X_test.csv')
+        y_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/y_test.csv')
+        trmnt_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/trmnt_test.csv')
 
         uplift_ct = loaded_model.predict(X_test_2)
 
@@ -211,8 +211,9 @@ def campaign_results():
 
 def uplift_quadrants():
     
-    model_path = "model.pkl"
-    loaded_model = mlflow.sklearn.load_model(model_path)
+    model_uri = "https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
+    # Load the model from the run
+    loaded_model = mlflow.sklearn.load_model(model_uri)
 
     demo_cols = ['job_blue-collar',
        'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
