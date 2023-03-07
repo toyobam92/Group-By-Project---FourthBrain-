@@ -21,8 +21,8 @@ plt.style.use('seaborn-pastel')
 
 
 def load_data():
-    return pd.read_csv('../dat/feature_eng_data.csv')
-
+    url_dat = 'https://raw.githubusercontent.com/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv'
+    return pd.read_csv(url_dat,index_col=0)
 
 def create_plot(df, col, plot_type):
     if plot_type == 'treatment_tag':
