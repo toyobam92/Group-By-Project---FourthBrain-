@@ -21,7 +21,7 @@ plt.style.use('seaborn-pastel')
 
 
 def load_data():
-    url_dat = 'https://raw.githubusercontent.com/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv'
+    url_dat = 'https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv'
     return pd.read_csv(url_dat)
 
 def create_plot(df, col, plot_type):
