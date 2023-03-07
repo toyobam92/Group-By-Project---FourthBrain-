@@ -211,7 +211,7 @@ def campaign_results():
 
 def uplift_quadrants():
     
-    model_uri = "../nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
+    model_uri = ".https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
         # Load the model from the run
     loaded_model = mlflow.sklearn.load_model(model_uri)
 
@@ -223,9 +223,9 @@ def uplift_quadrants():
        'education_tertiary','age_0-25', 'age_25-35', 'age_35-50',
        'age_50-100']
     
-    X_test_2 = pd.read_csv('../dat/X_test.csv')
-    y_test = pd.read_csv('../dat/y_test.csv')
-    trmnt_test = pd.read_csv('../dat/trmnt_test.csv')
+    X_test_2 = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/X_test.csv')
+    y_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/y_test.csv')
+    trmnt_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/trmnt_test.csv')
 
     uplift_ct = loaded_model.predict(X_test_2)
 
