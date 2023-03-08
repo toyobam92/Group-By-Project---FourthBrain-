@@ -34,7 +34,7 @@ nb:  contains the notebooks and source code for our Uplift machine learning mode
 
 reports: contains presentations and technical reports that document our progress and findings.
 
-app: contains the app.py files for deployment
+app: contains the app.py files for deployment.
 
 ### Getting Started
 
