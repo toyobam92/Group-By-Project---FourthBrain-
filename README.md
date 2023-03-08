@@ -34,6 +34,8 @@ nb:  contains the notebooks and source code for our Uplift machine learning mode
 
 reports: contains presentations and technical reports that document our progress and findings.
 
+app: contains the app.py files for deployment
+
 ### Getting Started
 
 To get started with our project, clone the repository and install the required dependencies. The dependencies are listed in the requirements.txt file.
