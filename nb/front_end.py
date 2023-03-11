@@ -414,7 +414,19 @@ def app():
     #quartile_100 = st.sidebar.number_input('Value for 100% quartile', min_value=0.0, max_value=1.0, value=1.0, step=0.1)
     #quartile_values = [quartile_0, quartile_20, quartile_50, quartile_80, quartile_100]
     selected_uplift_category = st.selectbox('Select uplift category', ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things'])
-    selected_variable = st.selectbox('Select variable', ['Numerical Variable 1', 'Numerical Variable 2', 'Categorical Variable 1', 'Categorical Variable 2'])
+    selected_variable = st.selectbox('Select variable', ['balance', 'previous', 'pdays', 'job_admin.', 'job_blue-collar',
+       'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
+       'job_self-employed', 'job_services', 'job_student', 'job_technician',
+       'job_unemployed', 'marital_divorced', 'marital_married',
+       'marital_single', 'education_primary', 'education_secondary',
+       'education_tertiary', 'default_no', 'default_yes', 'housing_no',
+       'housing_yes', 'loan_no', 'loan_yes', 'contact_cellular',
+       'contact_telephone', 'poutcome_failure', 'poutcome_success',
+       'month_apr', 'month_aug', 'month_dec', 'month_feb', 'month_jan',
+       'month_jul', 'month_jun', 'month_mar', 'month_may', 'month_nov',
+       'month_oct', 'month_sep', 'age_0-25', 'age_25-35', 'age_35-50',
+       'age_50-100', 'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31',
+       'treatment_tag', 'conversion'])
     
     initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
     quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
