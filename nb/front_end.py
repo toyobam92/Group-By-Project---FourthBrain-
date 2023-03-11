@@ -376,10 +376,17 @@ def uplift_quadrants(quartile_values, selected_variable):
         df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index(name='count')
         ylabel = selected_variable
 
+
+    # Set the index to the uplift category
+    df_grouped.set_index('uplift_category', inplace=True)
+
+    # Define a custom color palette
+    colors = ['#6699CC', '#88CCEE', '#44AA99', '#117733']
+    
     # Plot using seaborn
     sns.set_style('whitegrid')
-    fig, ax = plt.subplots(figsize=(10,6))
-    sns.barplot(x=selected_variable, hue='uplift_category', data=df_grouped, ax=ax)
+    fig, ax = plt.subplots(figsize=(10,6))  
+    sns.barplot(x=df_grouped.index, y='selected_variable', data=df_grouped, palette=colors)
     plt.title(f'{selected_variable} by Uplift Category )')
     plt.show()
 
@@ -414,7 +421,6 @@ def app():
     #quartile_80 = st.sidebar.number_input('Value for 80% quartile', min_value=0.0, max_value=1.0, value=0.8, step=0.1)
     #quartile_100 = st.sidebar.number_input('Value for 100% quartile', min_value=0.0, max_value=1.0, value=1.0, step=0.1)
     #quartile_values = [quartile_0, quartile_20, quartile_50, quartile_80, quartile_100]
-    selected_uplift_category = st.selectbox('Select uplift category', ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things'])
     selected_variable = st.selectbox('Select variable', ['balance', 'previous', 'pdays', 'job_admin.', 'job_blue-collar',
        'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
        'job_self-employed', 'job_services', 'job_student', 'job_technician',
