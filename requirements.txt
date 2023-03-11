@@ -8,3 +8,4 @@ catboost
 seaborn
 sklift
 scipy
+matplotlib
