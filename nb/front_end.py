@@ -222,7 +222,7 @@ def campaign_results():
 
 
 
-def uplift_quadrants(quartile_values,selected_uplift_category, selected_variable):
+def uplift_quadrants(quartile_values, selected_variable):
     #st.write(os.listdir())
     s3 = boto3.client('s3')
     bucket_name = 'uplift-model'
@@ -379,8 +379,8 @@ def uplift_quadrants(quartile_values,selected_uplift_category, selected_variable
     # Plot using seaborn
     sns.set_style('whitegrid')
     fig, ax = plt.subplots(figsize=(10,6))
-    sns.barplot(x=selected_variable, hue='uplift_category', data=df_grouped[df_grouped['uplift_category']==selected_uplift_category], ax=ax)
-    plt.title(f'{selected_variable} by Uplift Category ({selected_uplift_category})')
+    sns.barplot(x=selected_variable, hue='uplift_category', data=df_grouped[df_grouped['uplift_category']], ax=ax)
+    plt.title(f'{selected_variable} by Uplift Category )')
     plt.show()
 
     # Display plot in Streamlit
@@ -440,7 +440,7 @@ def app():
         campaign_results()
     elif selected_tab == 'Uplift Segment Results':
         st.write('Uplift Segment Results')
-        uplift_quadrants(quartile_values,selected_uplift_category, selected_variable)
+        uplift_quadrants(quartile_values, selected_variable)
         
 
 if __name__ == '__main__':
