@@ -4,6 +4,7 @@ import seaborn as sns
 from sklift.metrics import uplift_by_percentile
 import mlflow
 import altair as alt
+import boto3
 #import matplotlib.pyplot as plt
 
 
@@ -20,6 +21,7 @@ NUM_COLS = ['age', 'balance', 'duration', 'pdays', 'previous']
 
 
 def load_data(bucket_name):
+    s3 = boto3.client('s3')
     s3_path = f's3://{bucket_name}/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
     return pd.read_csv(s3_path)
 
