@@ -373,7 +373,7 @@ def uplift_quadrants(quartile_values, selected_variable):
         ylabel = selected_variable
         
     else:
-        df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index(name='count')
+        df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index()
         ylabel = selected_variable
 
 
