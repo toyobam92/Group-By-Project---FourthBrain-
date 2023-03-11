@@ -211,7 +211,7 @@ def campaign_results():
 
 def uplift_quadrants():
     
-    model_uri = "https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
+    model_uri = "nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
     # Load the model from the run
     loaded_model = mlflow.sklearn.load_model(model_uri)
 
