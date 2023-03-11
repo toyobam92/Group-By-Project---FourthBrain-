@@ -22,7 +22,10 @@ NUM_COLS = ['age', 'balance', 'duration', 'pdays', 'previous']
 
 def load_data():
     s3 = boto3.client('s3')
-    s3_path = 's3://uplift-model/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
+    bucket_name = 'uplift-model'
+    s3_path= 's3://{}/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'.format(bucket_name)
+    #s3 = boto3.client('s3')
+    #s3_path = 's3://uplift-model/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
     return pd.read_csv(s3_path)
 
 
