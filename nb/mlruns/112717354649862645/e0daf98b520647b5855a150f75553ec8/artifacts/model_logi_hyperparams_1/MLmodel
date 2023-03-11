@@ -1,0 +1,19 @@
+artifact_path: model_logi_hyperparams_1
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.1
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.1.1
+mlflow_version: 2.1.1
+model_uuid: 3b1301694fa1419fab212a900d58baf8
+run_id: e0daf98b520647b5855a150f75553ec8
+utc_time_created: '2023-03-06 02:52:59.339040'

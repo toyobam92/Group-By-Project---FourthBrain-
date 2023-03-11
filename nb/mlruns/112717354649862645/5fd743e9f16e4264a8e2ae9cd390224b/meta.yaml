@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/toyosibamidele/Desktop/uplift_model/Group-By-Project---FourthBrain-/nb/mlruns/112717354649862645/5fd743e9f16e4264a8e2ae9cd390224b/artifacts
+end_time: 1678071228018
+entry_point_name: ''
+experiment_id: '112717354649862645'
+lifecycle_stage: active
+run_id: 5fd743e9f16e4264a8e2ae9cd390224b
+run_name: welcoming-turtle-433
+run_uuid: 5fd743e9f16e4264a8e2ae9cd390224b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678071214908
+status: 3
+tags: []
+user_id: toyosibamidele

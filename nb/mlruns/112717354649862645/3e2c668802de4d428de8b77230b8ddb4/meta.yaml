@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/toyosibamidele/Desktop/uplift_model/Group-By-Project---FourthBrain-/nb/mlruns/112717354649862645/3e2c668802de4d428de8b77230b8ddb4/artifacts
+end_time: 1678071256161
+entry_point_name: ''
+experiment_id: '112717354649862645'
+lifecycle_stage: active
+run_id: 3e2c668802de4d428de8b77230b8ddb4
+run_name: polite-stag-987
+run_uuid: 3e2c668802de4d428de8b77230b8ddb4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678071251763
+status: 3
+tags: []
+user_id: toyosibamidele

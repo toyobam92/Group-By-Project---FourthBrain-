@@ -8,3 +8,4 @@ mlflow
 scikit-uplift
 catboost
 pandas
+boto3
