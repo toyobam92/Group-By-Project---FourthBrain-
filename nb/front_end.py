@@ -278,14 +278,7 @@ def uplift_quadrants(quartile_values):
         else:
             st.error("An error occurred while categorizing customers based on uplift. Please try again.")
             
-     # Create a DataFrame with only the Persuadables
-    persuadables_df = df[df['uplift_category'] == 'Persuadable']
 
-    # Add a download button to download the Persuadables data as a CSV file
-    csv = persuadables_df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="persuadables.csv">Download Persuadables Data</a>'
-    st.markdown(href, unsafe_allow_html=True)
 
     #labels = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things']
     # Use list comprehension to create a list of sliders for each element in the quantile cutoff list
@@ -373,6 +366,14 @@ def uplift_quadrants(quartile_values):
     #Show the plot
     st.pyplot(fig)
     st.write(df)
+    # Create a DataFrame with only the Persuadables
+    persuadables_df = df[df['uplift_category'] == 'Persuadable']
+
+    # Add a download button to download the Persuadables data as a CSV file
+    csv = persuadables_df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="persuadables.csv">Download Persuadables Data</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
     
 
@@ -384,7 +385,7 @@ def app():
     selected_tab = st.sidebar.selectbox('', tabs)
     
      # create sidebar widgets for quartile values
-   #quartile_0 = st.sidebar.number_input('Value for 0% quartile', min_value=0.0, max_value=1.0, value=0.0, step=0.1)
+    #quartile_0 = st.sidebar.number_input('Value for 0% quartile', min_value=0.0, max_value=1.0, value=0.0, step=0.1)
     #quartile_20 = st.sidebar.number_input('Value for 20% quartile', min_value=0.0, max_value=1.0, value=0.2, step=0.1)
     #quartile_50 = st.sidebar.number_input('Value for 50% quartile', min_value=0.0, max_value=1.0, value=0.5, step=0.1)
     #quartile_80 = st.sidebar.number_input('Value for 80% quartile', min_value=0.0, max_value=1.0, value=0.8, step=0.1)
