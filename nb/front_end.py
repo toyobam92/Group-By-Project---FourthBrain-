@@ -367,7 +367,7 @@ def uplift_quadrants(quartile_values):
     st.pyplot(fig)
     st.write(df)
     # Create a DataFrame with only the Persuadables
-    persuadables_df = df[df['uplift_category'] == 'Persuadable']
+    persuadables_df = df[df['uplift_category'] == 'Persuadables']
 
     # Add a download button to download the Persuadables data as a CSV file
     csv = persuadables_df.to_csv(index=False)
