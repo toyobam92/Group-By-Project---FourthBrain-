@@ -222,7 +222,7 @@ def campaign_results():
 
 
 
-def uplift_quadrants(quartile_values):
+def uplift_quadrants(quartile_values,selected_uplift_category, selected_variable):
     #st.write(os.listdir())
     s3 = boto3.client('s3')
     bucket_name = 'uplift-model'
@@ -367,6 +367,26 @@ def uplift_quadrants(quartile_values):
     st.pyplot(fig)
     st.write(df)
     # Create a DataFrame with only the Persuadables
+    
+    if selected_variable in demo_cols:
+        df_grouped = df.groupby('uplift_category')[selected_variable].mean().reset_index()
+        ylabel = 'Mean'
+    else:
+        df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index(name='count')
+        ylabel = 'Count'
+
+    # Plot using seaborn
+    sns.set_style('whitegrid')
+    fig, ax = plt.subplots(figsize=(10,6))
+    sns.barplot(x='uplift_category', y=ylabel, hue=selected_variable, data=df_grouped[df_grouped['uplift_category']==selected_uplift_category], ax=ax)
+    plt.title(f'{selected_variable} by Uplift Category ({selected_uplift_category})')
+    plt.show()
+
+    # Display plot in Streamlit
+    st.pyplot(fig)
+    
+    
+    
     persuadables_df = df[df['uplift_category'] == 'Persudables']
 
     # Add a download button to download the Persuadables data as a CSV file
@@ -405,7 +425,7 @@ def app():
         campaign_results()
     elif selected_tab == 'Uplift Segment Results':
         st.write('Uplift Segment Results')
-        uplift_quadrants(quartile_values)
+        uplift_quadrants(quartile_values,selected_uplift_category, selected_variable)
         
 
 if __name__ == '__main__':
