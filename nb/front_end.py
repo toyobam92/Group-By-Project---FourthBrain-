@@ -220,7 +220,8 @@ def campaign_results():
         st.pyplot(fig)
 
 
-def uplift_quadrants():
+
+def uplift_quadrants(quartile_values):
     #st.write(os.listdir())
     s3 = boto3.client('s3')
     bucket_name = 'uplift-model'
@@ -264,7 +265,22 @@ def uplift_quadrants():
     sns.set_palette(['#4C72B0', '#55A868', '#C44E52', '#8172B2'])
 
     # Categorize customers based on uplift
-    df['uplift_category'] = pd.qcut(df['uplift_score'], q=[0, 0.2, 0.5, 0.8, 1], labels=['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things'])
+    quartile_cutoffs = [0.0] + quartile_values + [1.0]
+    label_names = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Thing']
+    df['uplift_category'] = pd.qcut(df['uplift_score'], q=quartile_cutoffs, labels=label_names)
+    
+    #labels = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things']
+    # Use list comprehension to create a list of sliders for each element in the quantile cutoff list
+    # create a list of initial quantile cutoff values
+    #initial_q = [0, 0.2, 0.5, 0.8, 1]
+
+     #  use list comprehension to create a slider for each element in the quantile cutoff list
+    #quantile_cutoffs = [st.slider(f'Quantile {i}', min_value=0.0, max_value=1.0, step=0.01, value=initial_q[i]) for i in range(len(initial_q))]
+
+    # Categorize customers based on uplift using the modified quantile cutoff list
+    #df['uplift_category'] = pd.qcut(df['uplift_score'], q=quantile_cutoffs, labels=labels)
+    
+    #df['uplift_category'] = pd.qcut(df['uplift_score'], q=[0, 0.2, 0.5, 0.8, 1], labels=['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things'])
 
     # Plot histogram of uplift by category
     sns.histplot(data=df, x='uplift_score', hue='uplift_category', multiple='stack', bins=30, ax=axs[0, 0])
@@ -338,6 +354,7 @@ def uplift_quadrants():
 
     #Show the plot
     st.pyplot(fig)
+    st.write(df)
 
     
 
@@ -347,6 +364,17 @@ def app():
 
     tabs = ['Categorical Analysis', 'Numerical Analysis', 'Campaign Results', 'Uplift Segment Results']
     selected_tab = st.sidebar.selectbox('', tabs)
+    
+     # create sidebar widgets for quartile values
+   #quartile_0 = st.sidebar.number_input('Value for 0% quartile', min_value=0.0, max_value=1.0, value=0.0, step=0.1)
+    #quartile_20 = st.sidebar.number_input('Value for 20% quartile', min_value=0.0, max_value=1.0, value=0.2, step=0.1)
+    #quartile_50 = st.sidebar.number_input('Value for 50% quartile', min_value=0.0, max_value=1.0, value=0.5, step=0.1)
+    #quartile_80 = st.sidebar.number_input('Value for 80% quartile', min_value=0.0, max_value=1.0, value=0.8, step=0.1)
+    #quartile_100 = st.sidebar.number_input('Value for 100% quartile', min_value=0.0, max_value=1.0, value=1.0, step=0.1)
+    #quartile_values = [quartile_0, quartile_20, quartile_50, quartile_80, quartile_100]
+    
+    initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
+    quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=initial_quartile_values[i], step=0.1) for i in range(5)]
 
     if selected_tab == 'Categorical Analysis':
         categorical_analysis()
@@ -356,7 +384,8 @@ def app():
         campaign_results()
     elif selected_tab == 'Uplift Segment Results':
         st.write('Uplift Segment Results')
-        uplift_quadrants()
+        uplift_quadrants(quartile_values)
+        
 
 if __name__ == '__main__':
     app()
