@@ -370,12 +370,12 @@ def uplift_quadrants(quartile_values, selected_variable):
     st.write(df)
     # Create a DataFrame with only the Persuadables
     
-    if selected_variable in num_cols:
-        df_grouped = df.groupby('uplift_category')[selected_variable].mean().reset_index()
+    if selected_variable not in num_cols:
+        df_grouped = df.groupby('uplift_category')[selected_variable].size().reset_index()
         ylabel = selected_variable
         
     else:
-        df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index()
+        df_grouped = df.groupby(['uplift_category', selected_variable]).mean().reset_index()
         ylabel = selected_variable
 
 
