@@ -368,7 +368,7 @@ def uplift_quadrants(quartile_values,selected_uplift_category, selected_variable
     st.write(df)
     # Create a DataFrame with only the Persuadables
     
-    if selected_variable in demo_cols:
+    if selected_variable not in demo_cols:
         df_grouped = df.groupby('uplift_category')[selected_variable].mean().reset_index()
         ylabel = 'Mean'
     else:
@@ -413,6 +413,8 @@ def app():
     #quartile_80 = st.sidebar.number_input('Value for 80% quartile', min_value=0.0, max_value=1.0, value=0.8, step=0.1)
     #quartile_100 = st.sidebar.number_input('Value for 100% quartile', min_value=0.0, max_value=1.0, value=1.0, step=0.1)
     #quartile_values = [quartile_0, quartile_20, quartile_50, quartile_80, quartile_100]
+    selected_uplift_category = st.selectbox('Select uplift category', ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things'])
+    selected_variable = st.selectbox('Select variable', ['Numerical Variable 1', 'Numerical Variable 2', 'Categorical Variable 1', 'Categorical Variable 2'])
     
     initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
     quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
