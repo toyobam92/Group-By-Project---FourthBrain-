@@ -97,7 +97,7 @@ def create_plot(df, col, plot_type):
                 .properties(title=f'{col}, treatment, and conversion with percentage')
                 )
         return chart
-    
+        
     elif plot_type == 'treatment_tag and conversion numerical':
         group_cols = ['treatment_tag', 'conversion']
         grouped = (
@@ -115,8 +115,15 @@ def create_plot(df, col, plot_type):
                 tooltip=['mean']
             )
             .properties(title=f'{col} vs Treatment Tag and Conversion')
+            .facet(column=alt.Column('conversion:N', title=None), 
+                spacing=20, 
+                title=None, 
+                columns=2)
+            .resolve_scale(y='independent')
+            .configure_axisX(labelAngle=-45)
         )
         return chart
+
     else:
         raise ValueError(f'Invalid plot type: {plot_type}')
 def categorical_analysis():
@@ -164,5 +171,5 @@ def app():
     #elif selected_tab == 'Uplift Segment Results':
         #st.write('Uplift Segment Results')
         #uplift_quadrants(quartile_values, selected_variable)
-    if __name__ == '__main__':
-        app()
+if __name__ == '__main__':
+    app()
