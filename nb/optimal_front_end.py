@@ -21,7 +21,7 @@ NUM_COLS = ['age', 'balance', 'duration', 'pdays', 'previous']
 
 
 def load_data():
-    url_dat = 'https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv'
+    url_dat = 'https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/final/dat/feature_eng_data.csv'
     return pd.read_csv(url_dat)
 
 def create_plot(df, col, plot_type):
