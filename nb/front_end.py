@@ -266,10 +266,17 @@ def uplift_quadrants(quartile_values):
 
     # Categorize customers based on uplift
     quartile_cutoffs = [0.0] + quartile_values + [1.0]
-    print(quartile_cutoffs)
     label_names = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Thing']
-    df['uplift_category'] = pd.qcut(df['uplift_score'], q=quartile_cutoffs, labels=label_names, duplicates='drop')
-    
+    try:
+        df['uplift_category'] = pd.qcut(df['uplift_score'], q=quartile_cutoffs, labels=label_names, duplicates='drop')
+    except ValueError as e:
+        if "Bin edges must be unique" in str(e):
+            st.error("Error: Unable to categorize customers based on uplift. The quartile values are not unique. Please adjust the quartile values to ensure that they are unique.")
+        elif "Bin labels must be one fewer than the number of bin edges" in str(e):
+            st.error("Error: Unable to categorize customers based on uplift. The number of bin labels must be one fewer than the number of bin edges. Please adjust the number of labels to match the number of edges.")
+        else:
+            st.error("An error occurred while categorizing customers based on uplift. Please try again.")
+
     #labels = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things']
     # Use list comprehension to create a list of sliders for each element in the quantile cutoff list
     # create a list of initial quantile cutoff values
