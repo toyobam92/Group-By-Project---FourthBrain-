@@ -22,7 +22,7 @@ NUM_COLS = ['age', 'balance', 'duration', 'pdays', 'previous']
 
 def load_data(bucket_name):
     s3 = boto3.client('s3')
-    s3_path = 's3://{bucket_name}/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
+    s3_path = f's3://{bucket_name}/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
     return pd.read_csv(s3_path)
 
 
