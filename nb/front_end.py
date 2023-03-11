@@ -370,10 +370,10 @@ def uplift_quadrants(quartile_values,selected_uplift_category, selected_variable
     
     if selected_variable not in demo_cols:
         df_grouped = df.groupby('uplift_category')[selected_variable].mean().reset_index()
-        ylabel = 'Mean'
+        ylabel = 'mean'
     else:
         df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index(name='count')
-        ylabel = 'Count'
+        ylabel = 'count'
 
     # Plot using seaborn
     sns.set_style('whitegrid')
