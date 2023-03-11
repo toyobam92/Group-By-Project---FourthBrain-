@@ -147,7 +147,7 @@ def campaign_results():
                                             strategy='overall',
                                             total=True, std=True, bins=10)
 
-        df = ct_percentile
+        df = pd.DataFrame(ct_percentile)
 
         # Set the default style
         sns.set_style('whitegrid')
