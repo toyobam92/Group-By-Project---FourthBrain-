@@ -1,0 +1,9 @@
+mlflow<3,>=2.1
+catboost==1.1.1
+cloudpickle==2.2.1
+colorama==0.4.6
+ipywidgets==8.0.4
+scikit-learn==1.1.1
+scikit-uplift==0.5.1
+typing-extensions==4.4.0
+xgboost==1.7.2
