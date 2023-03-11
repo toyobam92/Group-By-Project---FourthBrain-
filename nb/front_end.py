@@ -374,7 +374,7 @@ def app():
     #quartile_values = [quartile_0, quartile_20, quartile_50, quartile_80, quartile_100]
     
     initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
-    quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=initial_quartile_values[i], step=0.1) for i in range(5)]
+    quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
 
     if selected_tab == 'Categorical Analysis':
         categorical_analysis()
