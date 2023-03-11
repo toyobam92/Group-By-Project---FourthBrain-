@@ -26,7 +26,6 @@ def load_data():
 
 import altair as alt
 
-
 def create_plot(df, col, plot_type):
     if plot_type == 'treatment_tag':
         grouped = (
@@ -110,23 +109,22 @@ def create_plot(df, col, plot_type):
             df.groupby(group_cols)[col]
             .mean()
             .reset_index(name='mean')
-            .pivot(index='treatment_tag', columns='conversion', values='mean')
         )
         chart = (
-            alt.Chart(grouped.reset_index())
+            alt.Chart(grouped)
             .mark_bar()
             .encode(
                 x=alt.X('treatment_tag:N', title='Treatment Tag'),
-                y=alt.Y(['Control', 'Treatment'], title=col),
+                y=alt.Y('mean:Q', title=col),
                 color=alt.Color('conversion:N', title='Conversion'),
-                tooltip=[col]
+                tooltip=['mean']
             )
             .properties(title=f'{col} vs Treatment Tag and Conversion')
+            .properties(width=500, height=300)
         )
         return chart
     else:
         raise ValueError(f'Invalid plot type: {plot_type}')
-
 def categorical_analysis():
     st.write('Categorical Features')
     data = load_data()
