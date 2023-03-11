@@ -24,6 +24,8 @@ def load_data():
     return pd.read_csv(url_dat)
 
 
+import altair as alt
+
 def create_plot(df, col, plot_type):
     if plot_type == 'treatment_tag':
         grouped = (
@@ -46,6 +48,7 @@ def create_plot(df, col, plot_type):
                 tooltip=[col, 'percentage']
             )
             .properties(title=f'{col}, treatment with percentage')
+            .properties(width=500, height=300)
         )
         return chart
 
@@ -70,6 +73,7 @@ def create_plot(df, col, plot_type):
                 tooltip=[col, 'percentage']
             )
             .properties(title=f'{col}, conversion with percentage')
+            .properties(width=500, height=300)
         )
         return chart
 
@@ -95,7 +99,8 @@ def create_plot(df, col, plot_type):
                 tooltip=[col, 'percentage']
                 )
                 .properties(title=f'{col}, treatment, and conversion with percentage')
-                )
+                .properties(width=500, height=300)
+        )
         return chart
     
     elif plot_type == 'treatment_tag and conversion numerical':
@@ -115,6 +120,7 @@ def create_plot(df, col, plot_type):
                 tooltip=['mean']
             )
             .properties(title=f'{col} vs Treatment Tag and Conversion')
+            .properties(width=500, height=300)
         )
         return chart
     else:
