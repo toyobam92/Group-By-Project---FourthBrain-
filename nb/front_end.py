@@ -266,7 +266,7 @@ def uplift_quadrants(quartile_values):
 
     # Categorize customers based on uplift
     quartile_cutoffs = [0.0] + quartile_values + [1.0]
-    label_names = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Thing']
+    label_names = labels=['Sleeping Dogs', 'Lost Causes', 'Sure Things', 'Persudables']
     try:
         df['uplift_category'] = pd.qcut(df['uplift_score'], q=quartile_cutoffs, labels=label_names, duplicates='drop')
     except ValueError as e:
