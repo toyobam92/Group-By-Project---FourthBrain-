@@ -379,7 +379,7 @@ def uplift_quadrants(quartile_values, selected_variable):
     # Plot using seaborn
     sns.set_style('whitegrid')
     fig, ax = plt.subplots(figsize=(10,6))
-    sns.barplot(x=selected_variable, hue='uplift_category', data=df_grouped[df_grouped['uplift_category']], ax=ax)
+    sns.barplot(x=selected_variable, hue='uplift_category', data=df_grouped, ax=ax)
     plt.title(f'{selected_variable} by Uplift Category )')
     plt.show()
 
