@@ -243,6 +243,8 @@ def uplift_quadrants(quartile_values, selected_variable):
        'education_tertiary','age_0-25', 'age_25-35', 'age_35-50',
        'age_50-100']
     
+    num_cols = ['balance', 'previous', 'pdays']
+    
     X_test_2 = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/X_test.csv')
     y_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/y_test.csv')
     trmnt_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/trmnt_test.csv')
@@ -368,7 +370,7 @@ def uplift_quadrants(quartile_values, selected_variable):
     st.write(df)
     # Create a DataFrame with only the Persuadables
     
-    if selected_variable not in demo_cols:
+    if selected_variable in num_cols:
         df_grouped = df.groupby('uplift_category')[selected_variable].mean().reset_index()
         ylabel = selected_variable
         
