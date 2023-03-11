@@ -1,6 +1,5 @@
 numpy
 matplotlib
-sklearn
 scipy
 seaborn
 statsmodels
@@ -9,3 +8,4 @@ scikit-uplift
 catboost
 pandas
 boto3
+scikit-learn
