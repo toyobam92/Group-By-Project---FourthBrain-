@@ -9,3 +9,4 @@ catboost
 pandas
 boto3
 scikit-learn
+base64

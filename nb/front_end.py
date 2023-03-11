@@ -1,4 +1,5 @@
 import streamlit as st
+import base64
 import boto3
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -276,6 +277,15 @@ def uplift_quadrants(quartile_values):
             st.error("Error: Unable to categorize customers based on uplift. The number of bin labels must be one fewer than the number of bin edges. Please adjust the number of labels to match the number of edges.")
         else:
             st.error("An error occurred while categorizing customers based on uplift. Please try again.")
+            
+     # Create a DataFrame with only the Persuadables
+    persuadables_df = df[df['uplift_category'] == 'Persuadable']
+
+    # Add a download button to download the Persuadables data as a CSV file
+    csv = persuadables_df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="persuadables.csv">Download Persuadables Data</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
     #labels = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things']
     # Use list comprehension to create a list of sliders for each element in the quantile cutoff list
