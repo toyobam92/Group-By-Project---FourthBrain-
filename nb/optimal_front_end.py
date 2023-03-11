@@ -21,13 +21,8 @@ NUM_COLS = ['age', 'balance', 'duration', 'pdays', 'previous']
 
 
 def load_data():
-    s3 = boto3.client('s3')
-    bucket_name = 'uplift-model'
-    s3_path= 's3://{}/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'.format(bucket_name)
-    #s3 = boto3.client('s3')
-    #s3_path = 's3://uplift-model/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
-    return pd.read_csv(s3_path)
-
+    url_dat = 'https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv'
+    return pd.read_csv(url_dat)
 
 def create_plot(df, col, plot_type):
     if plot_type == 'treatment_tag':
