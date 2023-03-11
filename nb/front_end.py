@@ -266,8 +266,9 @@ def uplift_quadrants(quartile_values):
 
     # Categorize customers based on uplift
     quartile_cutoffs = [0.0] + quartile_values + [1.0]
+    print(quartile_cutoffs)
     label_names = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Thing']
-    df['uplift_category'] = pd.qcut(df['uplift_score'], q=quartile_cutoffs, labels=label_names)
+    df['uplift_category'] = pd.qcut(df['uplift_score'], q=quartile_cutoffs, labels=label_names, duplicates='drop')
     
     #labels = ['Lost Causes', 'Sleeping Dogs', 'Persuadable', 'Sure Things']
     # Use list comprehension to create a list of sliders for each element in the quantile cutoff list
