@@ -134,7 +134,7 @@ def campaign_results():
         
         s3 = boto3.client('s3')
         bucket_name = 'uplift-model'
-        model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b//artifacts/class_transformation_model'.format(bucket_name)
+        model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model'.format(bucket_name)
 
 # Load the model
         loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
@@ -224,7 +224,7 @@ def uplift_quadrants():
     #st.write(os.listdir())
     s3 = boto3.client('s3')
     bucket_name = 'uplift-model'
-    model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b//artifacts/class_transformation_model'.format(bucket_name)
+    model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model'.format(bucket_name)
 
 # Load the model
     loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
