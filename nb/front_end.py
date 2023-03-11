@@ -371,15 +371,16 @@ def uplift_quadrants(quartile_values,selected_uplift_category, selected_variable
     if selected_variable not in demo_cols:
         df_grouped = df.groupby('uplift_category')[selected_variable].mean().reset_index()
         print(df_grouped)
+        ylabel = selected_variable
         
     else:
         df_grouped = df.groupby(['uplift_category', selected_variable]).size().reset_index(name='count')
-        
+        ylabel = selected_variable
 
     # Plot using seaborn
     sns.set_style('whitegrid')
     fig, ax = plt.subplots(figsize=(10,6))
-    sns.barplot(x='uplift_category', y=ylabel, hue=selected_variable, data=df_grouped[df_grouped['uplift_category']==selected_uplift_category], ax=ax)
+    sns.barplot(x='uplift_category', hue=selected_variable, data=df_grouped[df_grouped['uplift_category']==selected_uplift_category], ax=ax)
     plt.title(f'{selected_variable} by Uplift Category ({selected_uplift_category})')
     plt.show()
 
