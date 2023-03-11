@@ -367,12 +367,14 @@ def uplift_quadrants(quartile_values):
     st.pyplot(fig)
     st.write(df)
     # Create a DataFrame with only the Persuadables
-    persuadables_df = df[df['uplift_category'] == 'Persuadables']
+    persuadables_df = df[df['uplift_category'] == 'Persudables']
 
     # Add a download button to download the Persuadables data as a CSV file
     csv = persuadables_df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="persuadables.csv">Download Persuadables Data</a>'
+    # Create a download button
+    #st.download_button('Download CSV', href, file_name='data.csv')
     st.markdown(href, unsafe_allow_html=True)
 
     
