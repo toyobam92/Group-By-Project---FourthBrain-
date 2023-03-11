@@ -128,7 +128,7 @@ def numerical_analysis():
             st.pyplot(ax.figure)
 
 def campaign_results():
-        st.write(os.listdir())
+        #st.write(os.listdir())
         st.write('Campaign Results')
         # Replace with the actual path to the MLflow model
         model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
@@ -213,7 +213,7 @@ def campaign_results():
 
 
 def uplift_quadrants():
-    st.write(os.listdir())
+    #st.write(os.listdir())
     model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
     # Load the model from the run
     loaded_model = mlflow.sklearn.load_model(model_uri)
