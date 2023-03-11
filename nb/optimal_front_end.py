@@ -164,5 +164,5 @@ def app():
     #elif selected_tab == 'Uplift Segment Results':
         #st.write('Uplift Segment Results')
         #uplift_quadrants(quartile_values, selected_variable)
-    if __name__ == '__main__':
+if __name__ == '__main__':
         app()
