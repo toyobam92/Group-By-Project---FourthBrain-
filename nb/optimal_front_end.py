@@ -19,9 +19,9 @@ NUM_COLS = ['age', 'balance', 'duration', 'pdays', 'previous']
 #plt.style.use('seaborn-pastel')
 
 
-def load_data():
-    url_dat = 'https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/final/dat/feature_eng_data.csv'
-    return pd.read_csv(url_dat)
+def load_data(bucket_name):
+    s3_path = f's3://{bucket_name}/final/Group-By-Project---FourthBrain-/dat/feature_eng_data.csv'
+    return pd.read_csv(s3_path)
 
 
 def create_plot(df, col, plot_type):
@@ -128,7 +128,8 @@ def create_plot(df, col, plot_type):
         raise ValueError(f'Invalid plot type: {plot_type}')
 def categorical_analysis():
     st.write('Categorical Features')
-    data = load_data()
+    bucket_name = 'uplift-model'
+    data = load_data(bucket_name)
     selected_col = st.selectbox('Select a column', CAT_COLS)
 
     st.write('Select View to Group Data')
@@ -141,7 +142,8 @@ def categorical_analysis():
             
 def numerical_analysis():
     st.write('Numerical Features')
-    data = load_data()
+    bucket_name = 'uplift-model'
+    data = load_data(bucket_name)
     selected_col = st.selectbox('Select a column', NUM_COLS)
 
     st.write('Select View to Group Data')
