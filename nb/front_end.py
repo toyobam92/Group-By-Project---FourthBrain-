@@ -106,7 +106,7 @@ def categorical_analysis():
     selected_col = st.selectbox('Select a column', categorical_cols)
     
     st.write('Select View to Group Data')
-    plot_type = st.selectbox('', ['treatment_tag', 'conversion', 'treatment_tag and conversion', 'treatment_tag and conversion numerical'])
+    plot_type = st.selectbox('', ['treatment_tag', 'conversion', 'treatment_tag and conversion'])
 
     if st.button('Generate Plot'):
         if plot_type:
