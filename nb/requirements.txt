@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 numpy
 matplotlib
 sklearn
@@ -2654,3 +2655,8 @@ pandas
 
 
 
+=======
+version https://git-lfs.github.com/spec/v1
+oid sha256:5b69fe5e602df6513da11ab16e865216ded60a794c52c18d3a4f5dc59af3cc9d
+size 2734
+>>>>>>> ae41917bec63c050627bb3786192eddb44b53afc
