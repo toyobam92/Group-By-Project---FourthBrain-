@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import mlflow.sklearn
+import os
 from sklift.metrics import uplift_by_percentile
 from scipy.stats import linregress
 import numpy as np
@@ -10,6 +11,7 @@ import mlflow
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import plot_tree
+
 
 categorical_features = ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'poutcome', 'month']
 other_bins = ['age_0-25', 'age_25-35', 'age_35-50', 'age_50-100', 'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31']
@@ -126,9 +128,10 @@ def numerical_analysis():
             st.pyplot(ax.figure)
 
 def campaign_results():
+        st.write(os.listdir())
         st.write('Campaign Results')
         # Replace with the actual path to the MLflow model
-        model_uri = "https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
+        model_uri = "nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
         
         # Load the model from the run
         loaded_model = mlflow.sklearn.load_model(model_uri)
@@ -210,7 +213,7 @@ def campaign_results():
 
 
 def uplift_quadrants():
-    
+    st.write(os.listdir())
     model_uri = "nb/mlruns/124453656172599111/62707af127a247efa50970393b37855b/artifacts/class_transformation_model"
     # Load the model from the run
     loaded_model = mlflow.sklearn.load_model(model_uri)
