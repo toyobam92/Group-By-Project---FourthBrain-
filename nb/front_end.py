@@ -1,4 +1,5 @@
 import streamlit as st
+import boto3
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -130,11 +131,18 @@ def numerical_analysis():
 def campaign_results():
         #st.write(os.listdir())
         st.write('Campaign Results')
+        
+        s3 = boto3.client('s3')
+        bucket_name = 'uplift-model'
+        model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/'.format(bucket_name)
+
+# Load the model
+        loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
         # Replace with the actual path to the MLflow model
-        model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
+        #model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
         
         # Load the model from the run
-        loaded_model = mlflow.sklearn.load_model(model_uri)
+        #loaded_model = mlflow.sklearn.load_model(model_uri)
         
         X_test_2 = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/X_test.csv')
         y_test = pd.read_csv('https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/y_test.csv')
@@ -214,10 +222,16 @@ def campaign_results():
 
 def uplift_quadrants():
     #st.write(os.listdir())
-   
-    model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
+    s3 = boto3.client('s3')
+    bucket_name = 'uplift-model'
+    model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/'.format(bucket_name)
+
+# Load the model
+    loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
+
+    # model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
     # Load the model from the run
-    loaded_model = mlflow.sklearn.load_model(model_uri)
+    #loaded_model = mlflow.sklearn.load_model(model_uri)
 
     demo_cols = ['job_blue-collar',
        'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
