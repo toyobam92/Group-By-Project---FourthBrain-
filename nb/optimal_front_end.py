@@ -26,6 +26,7 @@ def load_data():
 
 import altair as alt
 
+
 def create_plot(df, col, plot_type):
     if plot_type == 'treatment_tag':
         grouped = (
