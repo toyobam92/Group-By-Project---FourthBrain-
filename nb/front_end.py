@@ -429,7 +429,7 @@ def app():
     st.title('Uplift Model - Campaign Analytics')
 
     tabs = ['Categorical Analysis', 'Numerical Analysis', 'Campaign Results', 'Uplift Segment Results']
-    selected_tab = st.radio('', tabs)
+    selected_tab = st.sidebar.radio('', tabs)
     
      # create sidebar widgets for quartile values
     #quartile_0 = st.sidebar.number_input('Value for 0% quartile', min_value=0.0, max_value=1.0, value=0.0, step=0.1)
