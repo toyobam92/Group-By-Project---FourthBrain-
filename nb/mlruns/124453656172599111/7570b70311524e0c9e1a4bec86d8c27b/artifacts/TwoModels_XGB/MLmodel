@@ -1,0 +1,19 @@
+artifact_path: TwoModels_XGB
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.1
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.1.1
+mlflow_version: 2.1.1
+model_uuid: 8536628278ad42a29bc7ce8238cae075
+run_id: 7570b70311524e0c9e1a4bec86d8c27b
+utc_time_created: '2023-03-06 02:57:23.601343'

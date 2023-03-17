@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/toyosibamidele/Desktop/uplift_model/Group-By-Project---FourthBrain-/nb/mlruns/124453656172599111/333603658aea4bf791a5ab6af139fd74/artifacts
+end_time: 1678071441794
+entry_point_name: ''
+experiment_id: '124453656172599111'
+lifecycle_stage: active
+run_id: 333603658aea4bf791a5ab6af139fd74
+run_name: SoloModel_XGB
+run_uuid: 333603658aea4bf791a5ab6af139fd74
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678071435943
+status: 3
+tags: []
+user_id: toyosibamidele

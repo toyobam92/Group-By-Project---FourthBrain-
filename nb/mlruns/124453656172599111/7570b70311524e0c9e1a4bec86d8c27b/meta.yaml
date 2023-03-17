@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/toyosibamidele/Desktop/uplift_model/Group-By-Project---FourthBrain-/nb/mlruns/124453656172599111/7570b70311524e0c9e1a4bec86d8c27b/artifacts
+end_time: 1678071446803
+entry_point_name: ''
+experiment_id: '124453656172599111'
+lifecycle_stage: active
+run_id: 7570b70311524e0c9e1a4bec86d8c27b
+run_name: TwoModels_XGB
+run_uuid: 7570b70311524e0c9e1a4bec86d8c27b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678071441799
+status: 3
+tags: []
+user_id: toyosibamidele

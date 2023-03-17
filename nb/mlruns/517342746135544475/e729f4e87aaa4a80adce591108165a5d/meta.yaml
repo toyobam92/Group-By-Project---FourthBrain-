@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/toyosibamidele/Desktop/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/e729f4e87aaa4a80adce591108165a5d/artifacts
+end_time: 1678499953745
+entry_point_name: ''
+experiment_id: '517342746135544475'
+lifecycle_stage: active
+run_id: e729f4e87aaa4a80adce591108165a5d
+run_name: SoloModel_XGB
+run_uuid: e729f4e87aaa4a80adce591108165a5d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678499946634
+status: 3
+tags: []
+user_id: toyosibamidele

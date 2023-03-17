@@ -1,0 +1,19 @@
+artifact_path: model_catb_hyperparams_2
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.1
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.1.1
+mlflow_version: 2.1.1
+model_uuid: cffb233e6e1a408a982a3f5e7bdd4db8
+run_id: 944881b1a9714e8a8c520e21f34c0f5f
+utc_time_created: '2023-03-06 02:55:11.859582'

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/toyosibamidele/Desktop/uplift_model/Group-By-Project---FourthBrain-/nb/mlruns/112717354649862645/b4ac14c913cd41138ab9822df3bc2c89/artifacts
+end_time: 1678071192551
+entry_point_name: ''
+experiment_id: '112717354649862645'
+lifecycle_stage: active
+run_id: b4ac14c913cd41138ab9822df3bc2c89
+run_name: merciful-perch-53
+run_uuid: b4ac14c913cd41138ab9822df3bc2c89
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678071187651
+status: 3
+tags: []
+user_id: toyosibamidele
