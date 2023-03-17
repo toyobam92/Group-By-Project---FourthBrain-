@@ -224,19 +224,7 @@ def campaign_results():
 
 def uplift_quadrants(quartile_values):
     
-    selected_variable = st.selectbox('Select variable', ['balance', 'previous', 'pdays', 'job_admin.', 'job_blue-collar',
-       'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
-       'job_self-employed', 'job_services', 'job_student', 'job_technician',
-       'job_unemployed', 'marital_divorced', 'marital_married',
-       'marital_single', 'education_primary', 'education_secondary',
-       'education_tertiary', 'default_no', 'default_yes', 'housing_no',
-       'housing_yes', 'loan_no', 'loan_yes', 'contact_cellular',
-       'contact_telephone', 'poutcome_failure', 'poutcome_success',
-       'month_apr', 'month_aug', 'month_dec', 'month_feb', 'month_jan',
-       'month_jul', 'month_jun', 'month_mar', 'month_may', 'month_nov',
-       'month_oct', 'month_sep', 'age_0-25', 'age_25-35', 'age_35-50',
-       'age_50-100', 'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31',
-       'treatment_tag', 'conversion'])
+  
     #st.write(os.listdir())
     s3 = boto3.client('s3')
     bucket_name = 'uplift-model'
@@ -383,6 +371,19 @@ def uplift_quadrants(quartile_values):
     st.pyplot(fig)
     st.write(df)
     # Create a DataFrame with only the Persuadables
+    selected_variable = st.selectbox('Select variable', ['balance', 'previous', 'pdays', 'job_admin.', 'job_blue-collar',
+       'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
+       'job_self-employed', 'job_services', 'job_student', 'job_technician',
+       'job_unemployed', 'marital_divorced', 'marital_married',
+       'marital_single', 'education_primary', 'education_secondary',
+       'education_tertiary', 'default_no', 'default_yes', 'housing_no',
+       'housing_yes', 'loan_no', 'loan_yes', 'contact_cellular',
+       'contact_telephone', 'poutcome_failure', 'poutcome_success',
+       'month_apr', 'month_aug', 'month_dec', 'month_feb', 'month_jan',
+       'month_jul', 'month_jun', 'month_mar', 'month_may', 'month_nov',
+       'month_oct', 'month_sep', 'age_0-25', 'age_25-35', 'age_35-50',
+       'age_50-100', 'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31',
+       'treatment_tag', 'conversion'])
     
     if selected_variable not in num_cols:
         df_grouped = df.groupby('uplift_category')[selected_variable].size().reset_index()
