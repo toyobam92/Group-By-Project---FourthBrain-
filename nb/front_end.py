@@ -447,7 +447,7 @@ def app():
        'age_50-100', 'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31',
        'treatment_tag', 'conversion'])
         initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
-        quartile_values = [st.bar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
+        quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
         uplift_quadrants(quartile_values, selected_variable)
         
 if __name__ == '__main__':
