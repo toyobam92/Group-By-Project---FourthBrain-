@@ -423,7 +423,17 @@ def app():
     #quartile_80 = st.sidebar.number_input('Value for 80% quartile', min_value=0.0, max_value=1.0, value=0.8, step=0.1)
     #quartile_100 = st.sidebar.number_input('Value for 100% quartile', min_value=0.0, max_value=1.0, value=1.0, step=0.1)
     #quartile_values = [quartile_0, quartile_20, quartile_50, quartile_80, quartile_100]
-    selected_variable = st.selectbox('Select variable', ['balance', 'previous', 'pdays', 'job_admin.', 'job_blue-collar',
+   
+
+    if selected_tab == 'Categorical Analysis':
+        categorical_analysis()
+    elif selected_tab == 'Numerical Analysis':
+        numerical_analysis()
+    elif selected_tab == 'Campaign Results':
+        campaign_results()
+    elif selected_tab == 'Uplift Segment Results':
+        st.write('Uplift Segment Results')
+        selected_variable = st.selectbox('Select variable', ['balance', 'previous', 'pdays', 'job_admin.', 'job_blue-collar',
        'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
        'job_self-employed', 'job_services', 'job_student', 'job_technician',
        'job_unemployed', 'marital_divorced', 'marital_married',
@@ -436,20 +446,9 @@ def app():
        'month_oct', 'month_sep', 'age_0-25', 'age_25-35', 'age_35-50',
        'age_50-100', 'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31',
        'treatment_tag', 'conversion'])
-    
-    initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
-    quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
-
-    if selected_tab == 'Categorical Analysis':
-        categorical_analysis()
-    elif selected_tab == 'Numerical Analysis':
-        numerical_analysis()
-    elif selected_tab == 'Campaign Results':
-        campaign_results()
-    elif selected_tab == 'Uplift Segment Results':
-        st.write('Uplift Segment Results')
+        initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
+        quartile_values = [st.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
         uplift_quadrants(quartile_values, selected_variable)
         
-
 if __name__ == '__main__':
     app()
