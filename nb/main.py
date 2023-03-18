@@ -551,7 +551,7 @@ def main():
             st.write(category_df)
             st.markdown(href, unsafe_allow_html=True)
         elif selected_plot == 'Qini Curve':   
-           plot =  plot_qini_curve(qini_x, qini_y)
+           plot =  plot_qini_curve(qini_x, qini_y, auc)
            st.altair_chart(plot, use_container_width=True)
     elif selected_tab == 'Welcome':
         welcome_page()
