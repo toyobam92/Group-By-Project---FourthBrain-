@@ -435,33 +435,32 @@ def plot_qini_curve(qini_x, qini_y):
 
     # Calculate random and perfect lines
     qini_data['Random'] = qini_data['Percentage of data targeted'] * qini_y[-1] / 100
-    qini_data['Perfect'] = qini_data['Percentage of data targeted'].apply(
-        lambda x: x * qini_y[-1] / 100 if x <= 100 else qini_y[-1]
-    )
 
-    # Create the Qini curve line chart
-    qini_curve_chart = alt.Chart(qini_data).mark_line(color='blue').encode(
+    max_uplift = qini_y[-1]
+    total_population = qini_x[-1]
+    total_treated = qini_x[np.argmax(qini_y)]
+    perfect_line_y = np.where(qini_x <= total_treated, qini_x * max_uplift / total_treated, max_uplift)
+    qini_data['Perfect'] = perfect_line_y
+
+    # Create a DataFrame for each line with an additional 'Line' column
+    qini_curve_data = qini_data[['Percentage of data targeted', 'Uplift']].assign(Line='Qini Curve')
+    random_data = qini_data[['Percentage of data targeted', 'Random']].rename(columns={'Random': 'Uplift'}).assign(Line='Random')
+    perfect_data = qini_data[['Percentage of data targeted', 'Perfect']].rename(columns={'Perfect': 'Uplift'}).assign(Line='Perfect')
+
+    # Combine the DataFrames
+    combined_data = pd.concat([qini_curve_data, random_data, perfect_data])
+
+    # Create the line chart with a legend
+    chart = alt.Chart(combined_data).mark_line(strokeDash=[3, 3]).encode(
         x='Percentage of data targeted',
-        y='Uplift'
-    )
-
-    # Create the random line chart
-    random_line_chart = alt.Chart(qini_data).mark_line(color='green', strokeDash=[3, 3]).encode(
-        x='Percentage of data targeted',
-        y='Random'
-    )
-
-    # Create the perfect line chart
-    perfect_line_chart = alt.Chart(qini_data).mark_line(color='red', strokeDash=[3, 3]).encode(
-        x='Percentage of data targeted',
-        y='Perfect'
-    )
-
-    # Combine the three line charts
-    combined_chart = (qini_curve_chart + random_line_chart + perfect_line_chart).properties(
+        y='Uplift',
+        color=alt.Color('Line', legend=alt.Legend(title='Lines')),
+        strokeDash=alt.StrokeDash('Line', legend=None)
+    ).properties(
         title='Qini Curve'
     )
-    return combined_chart
+
+    return chart
 
     #st.altair_chart(combined_chart, use_container_width=True)
 
@@ -554,8 +553,7 @@ def main():
             st.write(f'Explore Predicted Observations for {category} category')
             st.write(category_df)
             st.markdown(href, unsafe_allow_html=True)
-        elif selected_plot == 'Qini Curve':
-           df, plot_data_df ,X_test_2, y_test, trmnt_test = campaign_results()      
+        elif selected_plot == 'Qini Curve':   
            plot =  plot_qini_curve(qini_x, qini_y)
            st.altair_chart(plot, use_container_width=True)
     elif selected_tab == 'Welcome':
