@@ -430,36 +430,36 @@ def explore_predicted_observations(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
 
-def plot_qini_curve(qini_x, qini_y):
-    qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Uplift': qini_y})
+import numpy as np
+import altair as alt
+from sklift.metrics import qini_curve, uplift_auc_score
+
+def plot_qini_curve(y_true, uplift, treatment):
+    qini_x, qini_y = qini_curve(y_true, uplift, treatment)
+    auc = uplift_auc_score(y_true, uplift, treatment)
+
+    qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y})
 
     # Calculate random and perfect lines
-    qini_data['Random'] = qini_data['Percentage of data targeted'] * qini_y[-1] / 100
-
-    max_uplift = qini_y[-1]
-    total_population = qini_x[-1]
-    total_treated = qini_x[np.argmax(qini_y)]
-    perfect_line_y = np.where(qini_x <= total_treated, qini_x * max_uplift / total_treated, max_uplift)
-    qini_data['Perfect'] = perfect_line_y
+    qini_data['Random'] = qini_data['Percentage of data targeted'] * qini_y[-1] / qini_x[-1]
+    qini_data['Perfect'] = qini_data['Qini'].cummax()
 
     # Create a DataFrame for each line with an additional 'Line' column
-    qini_curve_data = qini_data[['Percentage of data targeted', 'Uplift']].assign(Line='Qini Curve')
-    random_data = qini_data[['Percentage of data targeted', 'Random']].rename(columns={'Random': 'Uplift'}).assign(Line='Random')
-    perfect_data = qini_data[['Percentage of data targeted', 'Perfect']].rename(columns={'Perfect': 'Uplift'}).assign(Line='Perfect')
-
-    # Combine the DataFrames
-    combined_data = pd.concat([qini_curve_data, random_data, perfect_data])
+    qini_curve_data = qini_data.melt(id_vars=['Percentage of data targeted'], value_vars=['Qini', 'Random', 'Perfect'],
+                                      var_name='Line', value_name='Uplift')
 
     # Create the line chart with a legend
-    chart = alt.Chart(combined_data).mark_line().encode(
+    chart = alt.Chart(qini_curve_data).mark_line().encode(
         x='Percentage of data targeted',
         y='Uplift',
         color=alt.Color('Line', legend=alt.Legend(title='Lines')),
-        strokeDash=alt.condition(alt.datum.Line == 'Qini Curve', alt.value([1, 0]), alt.value([3, 3]))
+        strokeDash=alt.condition(alt.datum.Line == 'Qini', alt.value([1, 0]), alt.value([3, 3]))
     ).properties(
-        title='Qini Curve'
+        title=f'Qini Curve (AUC: {auc:.4f})'
     )
+
     return chart
+
 
 
     #st.altair_chart(combined_chart, use_container_width=True)
