@@ -219,12 +219,11 @@ def campaign_results():
     ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
                                          strategy='overall', total=True, std=True, bins=10)
     df = pd.DataFrame(ct_percentile)
-    
-    qini_x, qini_y = qini_curve(y_test, uplift_ct, trmnt_test)
+
     
     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
 
-    return df, plot_data_df , (qini_x, qini_y)
+    return df, plot_data_df ,X_test_2, y_test, trmnt_test 
 
 @st.cache_resource
 def get_model_uri():
@@ -327,7 +326,7 @@ def create_box_plot(df):
 
 def clean():
     
-    df, plot_data_df , (qini_x, qini_y) = campaign_results()
+    df, plot_data_df ,X_test_2, y_test, trmnt_test  = campaign_results()
     
     initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
     quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
@@ -335,7 +334,9 @@ def clean():
     label_names = ['Sleeping Dogs', 'Lost Causes', 'Sure Things', 'Persuadables']
     plot_data_df['uplift_category'] = pd.qcut(plot_data_df['uplift_score'], q=quartile_values, labels=label_names, duplicates='drop')
     
-    return plot_data_df
+    qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_category'] , trmnt_test)
+    
+    return plot_data_df, (qini_x, qini_y )
 
 
 def uplift_histogram(df):
@@ -498,7 +499,7 @@ def main():
             
  
     elif selected_tab == 'Campaign Results':
-        df, plot_data_df , (qini_x, qini_y)= campaign_results()
+        df, plot_data_df ,X_test_2, y_test, trmnt_test = campaign_results()
              # Create a selection box for the plots
         plot_options = [
         'Uplift Chart',
@@ -524,7 +525,7 @@ def main():
             bar_chart = create_bar_chart(df)
             st.altair_chart(bar_chart, use_container_width=True)
     elif selected_tab == 'Uplift Segment':
-        plot_data_df = clean()
+        plot_data_df, (qini_x, qini_y) = clean()
         plot_options = [
         'Uplift Histogram',
         'Uplift Count Plot',
@@ -554,7 +555,7 @@ def main():
             st.write(category_df)
             st.markdown(href, unsafe_allow_html=True)
         elif selected_plot == 'Qini Curve':
-           df, plot_data_df , (qini_x, qini_y)= campaign_results()      
+           df, plot_data_df ,X_test_2, y_test, trmnt_test = campaign_results()      
            plot =  plot_qini_curve(qini_x, qini_y)
            st.altair_chart(plot, use_container_width=True)
     elif selected_tab == 'Welcome':
