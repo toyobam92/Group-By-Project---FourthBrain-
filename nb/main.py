@@ -17,7 +17,7 @@ import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import graphviz
 from io import BytesIO
-from sklift.metrics import qini_curve
+from sklift.metrics import qini_curve,uplift_auc_score
 
 
 @st.cache_data
@@ -336,7 +336,10 @@ def clean():
     
     qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'] , trmnt_test)
     
-    return plot_data_df, (qini_x, qini_y )
+    auc = uplift_auc_score(y_test, plot_data_df['uplift_score'] , trmnt_test)
+
+    
+    return plot_data_df, (qini_x, qini_y), auc
 
 
 def uplift_histogram(df):
@@ -430,14 +433,8 @@ def explore_predicted_observations(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
 
-import numpy as np
-import altair as alt
-from sklift.metrics import qini_curve, uplift_auc_score
-
-def plot_qini_curve(y_true, uplift, treatment):
-    qini_x, qini_y = qini_curve(y_true, uplift, treatment)
-    auc = uplift_auc_score(y_true, uplift, treatment)
-
+def plot_qini_curve(qini_x, qini_y ,auc):
+    
     qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y})
 
     # Calculate random and perfect lines
@@ -524,7 +521,7 @@ def main():
             bar_chart = create_bar_chart(df)
             st.altair_chart(bar_chart, use_container_width=True)
     elif selected_tab == 'Uplift Segment':
-        plot_data_df, (qini_x, qini_y) = clean()
+        plot_data_df, (qini_x, qini_y),auc = clean()
         plot_options = [
         'Uplift Histogram',
         'Uplift Count Plot',
