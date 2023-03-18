@@ -16,7 +16,6 @@ import base64
 import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import graphviz
-import dtreeviz
 from io import BytesIO
 
 
