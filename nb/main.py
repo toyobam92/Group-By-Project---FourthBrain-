@@ -17,6 +17,7 @@ import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import graphviz
 from io import BytesIO
+from sklift.metrics import qini_curve
 
 
 @st.cache_data
@@ -203,7 +204,6 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
     return test_set_df          
             
 @st.cache_data
-
 def campaign_results():
 
     # Load the model
@@ -220,9 +220,11 @@ def campaign_results():
                                          strategy='overall', total=True, std=True, bins=10)
     df = pd.DataFrame(ct_percentile)
     
+    qini_x, qini_y = qini_curve(y_test, uplift_ct, trmnt_test)
+    
     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
 
-    return df, plot_data_df 
+    return df, plot_data_df , (qini_x, qini_y)
 
 @st.cache_resource
 def get_model_uri():
@@ -325,7 +327,7 @@ def create_box_plot(df):
 
 def clean():
     
-    df, plot_data_df = campaign_results()
+    df, plot_data_df , (qini_x, qini_y) = campaign_results()
     
     initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
     quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
@@ -426,7 +428,44 @@ def explore_predicted_observations(df):
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
-  
+
+def plot_qini_curve(qini_x, qini_y):
+    qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Uplift': qini_y})
+
+    # Calculate random and perfect lines
+    qini_data['Random'] = qini_data['Percentage of data targeted'] * qini_y[-1] / 100
+    qini_data['Perfect'] = qini_data['Percentage of data targeted'].apply(
+        lambda x: x * qini_y[-1] / 100 if x <= 100 else qini_y[-1]
+    )
+
+    # Create the Qini curve line chart
+    qini_curve_chart = alt.Chart(qini_data).mark_line(color='blue').encode(
+        x='Percentage of data targeted',
+        y='Uplift'
+    )
+
+    # Create the random line chart
+    random_line_chart = alt.Chart(qini_data).mark_line(color='green', strokeDash=[3, 3]).encode(
+        x='Percentage of data targeted',
+        y='Random'
+    )
+
+    # Create the perfect line chart
+    perfect_line_chart = alt.Chart(qini_data).mark_line(color='red', strokeDash=[3, 3]).encode(
+        x='Percentage of data targeted',
+        y='Perfect'
+    )
+
+    # Combine the three line charts
+    combined_chart = (qini_curve_chart + random_line_chart + perfect_line_chart).properties(
+        title='Qini Curve'
+    )
+    return combined_chart
+
+    #st.altair_chart(combined_chart, use_container_width=True)
+
+
+ 
 def welcome_page():
     st.title("Welcome to the Uplift Model Platform")
     st.write("""
@@ -459,7 +498,7 @@ def main():
             
  
     elif selected_tab == 'Campaign Results':
-        df, plot_data_df = campaign_results()
+        df, plot_data_df , (qini_x, qini_y)= campaign_results()
              # Create a selection box for the plots
         plot_options = [
         'Uplift Chart',
@@ -491,6 +530,7 @@ def main():
         'Uplift Count Plot',
         'Uplift Bar Plot',
         'Decision Tree Plot',
+        'Qini Curve',
         'Uplift by Variable',
         'Explore and Download Predicted Observations']
         selected_plot = st.selectbox('Select a plot to display:', plot_options) 
@@ -513,6 +553,10 @@ def main():
             st.write(f'Explore Predicted Observations for {category} category')
             st.write(category_df)
             st.markdown(href, unsafe_allow_html=True)
+        elif selected_plot == 'Qini Curve':
+           df, plot_data_df , (qini_x, qini_y)= campaign_results()      
+           plot =  plot_qini_curve(qini_x, qini_y)
+           st.altair_chart(plot, use_container_width=True)
     elif selected_tab == 'Welcome':
         welcome_page()
     elif selected_tab == "Campaign Visualizations":
