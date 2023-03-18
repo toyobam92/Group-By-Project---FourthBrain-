@@ -334,7 +334,7 @@ def clean():
     label_names = ['Sleeping Dogs', 'Lost Causes', 'Sure Things', 'Persuadables']
     plot_data_df['uplift_category'] = pd.qcut(plot_data_df['uplift_score'], q=quartile_values, labels=label_names, duplicates='drop')
     
-    qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_category'] , trmnt_test)
+    qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'] , trmnt_test)
     
     return plot_data_df, (qini_x, qini_y )
 
