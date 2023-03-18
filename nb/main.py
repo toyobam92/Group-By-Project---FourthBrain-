@@ -451,16 +451,16 @@ def plot_qini_curve(qini_x, qini_y):
     combined_data = pd.concat([qini_curve_data, random_data, perfect_data])
 
     # Create the line chart with a legend
-    chart = alt.Chart(combined_data).mark_line(strokeDash=[3, 3]).encode(
+    chart = alt.Chart(combined_data).mark_line().encode(
         x='Percentage of data targeted',
         y='Uplift',
         color=alt.Color('Line', legend=alt.Legend(title='Lines')),
-        strokeDash=alt.StrokeDash('Line', legend=None)
+        strokeDash=alt.condition(alt.datum.Line == 'Qini Curve', alt.value([1, 0]), alt.value([3, 3]))
     ).properties(
         title='Qini Curve'
     )
-
     return chart
+
 
     #st.altair_chart(combined_chart, use_container_width=True)
 
