@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 import os
 import pandas as pd
 import altair as alt
@@ -486,9 +487,15 @@ def save_plots_and_generate_report(plot_data_df):
     }
 
     for plot_title, plot_info in plots.items():
-        chart_function = globals()[plot_title.lower().replace(" ", "_")]
-        chart = chart_function(plot_data_df)
-        altair_saver(chart, plot_info['filename'])
+        if plot_title == 'Decision Tree Plot':
+            fig = decision_tree_plot(plot_data_df)
+            fig.savefig(plot_info['filename'])
+            plt.close(fig)
+        else:
+            chart_function = globals()[plot_title.lower().replace(" ", "_")]
+            chart = chart_function(plot_data_df)
+            altair_saver(chart, plot_info['filename'])
+
 
     # Create a PDF report
     pdf = CustomPDF()
@@ -496,7 +503,9 @@ def save_plots_and_generate_report(plot_data_df):
     pdf.add_page()
 
     # Add cover page
-    pdf.titles("Uplift Model Report", "Subtitle: Additional Information", "Date: 2023-03-19")
+     # Add cover page
+    today = datetime.now().strftime("%Y-%m-%d")
+    pdf.titles("Uplift Model Report", "Subtitle: Additional Information", f"Date: {today}")
 
     # Add table of contents
     pdf.chapter_title("Table of Contents")
