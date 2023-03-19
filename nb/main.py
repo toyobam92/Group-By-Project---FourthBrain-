@@ -475,31 +475,6 @@ def plot_qini_curve(qini_x, qini_y ,auc):
 
 
 
-def plot_qini_curve(y_true, uplift, treatment):
-    qini_x, qini_y = qini_curve(y_true, uplift, treatment)
-    _, perfect_y = qini_curve(y_true, y_true * treatment, treatment)
-    auc = uplift_auc_score(y_true, uplift, treatment)
-
-    qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y, 'Perfect': perfect_y})
-
-    # Calculate random line
-    qini_data['Random'] = qini_data['Percentage of data targeted'] * qini_y[-1] / qini_x[-1]
-
-    # Create a DataFrame for each line with an additional 'Line' column
-    qini_curve_data = qini_data.melt(id_vars=['Percentage of data targeted'], value_vars=['Qini', 'Random', 'Perfect'],
-                                      var_name='Line', value_name='Uplift')
-
-    # Create the line chart with a legend
-    chart = alt.Chart(qini_curve_data).mark_line().encode(
-        x='Percentage of data targeted',
-        y='Uplift',
-        color=alt.Color('Line', legend=alt.Legend(title='Lines')),
-        strokeDash=alt.condition(alt.datum.Line == 'Qini', alt.value([1, 0]), alt.value([3, 3]))
-    ).properties(
-        title=f'Qini Curve (AUC: {auc:.4f})'
-    ).interactive()
-
-    return chart
 
 
     #st.altair_chart(combined_chart, use_container_width=True)
@@ -598,10 +573,10 @@ def main():
            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Generate Report':
             plots_dict = {
-    'Uplift Histogram': altair_saver.save(uplift_histogram(plot_data_df), format='png'),
-    'Uplift Count Plot': altair_saver.save(uplift_count_plot(plot_data_df), format='png'),
-    'Uplift Bar Plot': altair_saver.save(uplift_bar_plot(plot_data_df), format='png'),
-    'Decision Tree Plot': altair_saver.save(decision_tree_plot(plot_data_df), format='png'),
+    'Uplift Histogram': altair_saver.save(uplift_histogram(plot_data_df),fmt ='png'),
+    'Uplift Count Plot': altair_saver.save(uplift_count_plot(plot_data_df), fmt ='png'),
+    'Uplift Bar Plot': altair_saver.save(uplift_bar_plot(plot_data_df), fmt='png'),
+    'Decision Tree Plot': altair_saver.save(decision_tree_plot(plot_data_df), fmt='png'),
     'Download Uplift Category': None  # This plot is not saved as an image
      }
             generate_report(plots_dict)
