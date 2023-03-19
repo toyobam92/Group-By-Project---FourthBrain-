@@ -12,5 +12,9 @@ sklift
 base64
 plotly
 graphviz
+PIL
+altair_saver
+Pillow
+
 
 

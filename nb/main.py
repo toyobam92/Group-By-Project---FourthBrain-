@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import altair_saver
 import boto3
 import mlflow.sklearn
 import pandas as pd
@@ -17,6 +18,7 @@ import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import graphviz
 from io import BytesIO
+from PIL import Image
 from sklift.metrics import qini_curve,uplift_auc_score
 
 
@@ -434,45 +436,16 @@ def explore_predicted_observations(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
 
-def generate_report(df):
-    # Create plots
-    hist = uplift_histogram(df)
-    count_plot = uplift_count_plot(df)
-    bar_plot = uplift_bar_plot(df)
-    tree_plot = decision_tree_plot(df)
-
-    # Create HTML report
-    report_html = f"""
-    <html>
-    <head>
-    <style>
-    /* Add styles to your report here */
-    </style>
-    </head>
-    <body>
-    <h1>Uplift Model Report</h1>
-    <h2>Uplift Histogram</h2>
-    {hist.to_html()}
-    <h2>Uplift Count Plot</h2>
-    {count_plot.to_html()}
-    <h2>Uplift Bar Plot</h2>
-    {bar_plot.to_html()}
-    <h2>Decision Tree Plot</h2>
-    {tree_plot.to_html()}
-    </body>
-    </html>
-    """
-
-    # Save report to file
-    with open('uplift_report.html', 'w') as f:
-        f.write(report_html)
-
-    return 'uplift_report.html'
-
-# In your Streamlit app, add a button to generate the report and a download button to download the report file
-    if st.button('Generate Report'):
-        report_file = generate_report(df, quartile_values)
-        st.download_button('Download Report', data=open(report_file, 'rb').read(), file_name='uplift')
+def generate_report(plots_dict):
+    report = ''
+    for plot_name, plot in plots_dict.items():
+        if plot is not None:
+            image = Image.open(plot)
+            image_width, image_height = image.size
+            report += f'<h2>{plot_name}</h2><br><img src="data:image/png;base64,{plot}" width="{image_width}" height="{image_height}">'
+        else:
+            report += f'<h2>{plot_name}</h2><br>'
+    return report
 
 
 def plot_qini_curve(qini_x, qini_y ,auc):
@@ -623,7 +596,14 @@ def main():
            plot =  plot_qini_curve(qini_x, qini_y, auc)
            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Generate Report':
-            generate_report(plot_data_df)
+            plots_dict = {
+    'Uplift Histogram': altair_saver.save(uplift_histogram(plot_data_df), format='png'),
+    'Uplift Count Plot': altair_saver.save(uplift_count_plot(plot_data_df), format='png'),
+    'Uplift Bar Plot': altair_saver.save(uplift_bar_plot(plot_data_df), format='png'),
+    'Decision Tree Plot': altair_saver.save(decision_tree_plot(plot_data_df), format='png'),
+    'Download Uplift Category': None  # This plot is not saved as an image
+     }
+            generate_report(plots_dict)
     elif selected_tab == 'Welcome':
         welcome_page()
     elif selected_tab == "Campaign Visualizations":
