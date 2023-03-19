@@ -1,7 +1,8 @@
 import streamlit as st
+import os
 import pandas as pd
 import altair as alt
-import altair_saver
+from altair_saver import save as altair_saver
 import boto3
 import mlflow.sklearn
 import pandas as pd
@@ -20,6 +21,7 @@ import graphviz
 from io import BytesIO
 from PIL import Image
 from sklift.metrics import qini_curve,uplift_auc_score
+from fpdf import FPDF
 alt.data_transformers.disable_max_rows()
 
 
@@ -437,16 +439,84 @@ def explore_predicted_observations(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
 
-def generate_report(plots_dict):
-    report = ''
-    for plot_name, plot in plots_dict.items():
-        if plot is not None:
-            image = Image.open(plot)
-            image_width, image_height = image.size
-            report += f'<h2>{plot_name}</h2><br><img src="data:image/png;base64,{plot}" width="{image_width}" height="{image_height}">'
-        else:
-            report += f'<h2>{plot_name}</h2><br>'
-    return report
+from fpdf import FPDF
+
+class CustomPDF(FPDF):
+    def titles(self, title, subtitle, date):
+        self.set_font("Arial", "B", size=16)
+        self.cell(190, 10, txt=title, ln=True, align="C")
+        self.set_font("Arial", "", size=14)
+        self.cell(190, 10, txt=subtitle, ln=True, align="C")
+        self.cell(190, 10, txt=date, ln=True, align="C")
+        self.ln(20)
+
+    def chapter_title(self, title):
+        self.set_font("Arial", "B", size=14)
+        self.cell(190, 10, txt=title, ln=True, align="L")
+        self.ln(5)
+
+    def plot_image(self, image_path):
+        self.image(image_path, x=10, w=180)
+        self.ln(10)
+
+    def description(self, text):
+        self.set_font("Arial", "", size=12)
+        self.multi_cell(190, 10, txt=text, align="L")
+        self.ln(5)
+
+def save_plots_and_generate_report(plot_data_df):
+    # Save plots as images and create descriptions
+    plots = {
+        'Uplift Histogram': {
+            'filename': 'uplift_histogram.png',
+            'description': 'This histogram shows the distribution of uplift scores across different categories.'
+        },
+        'Uplift Count Plot': {
+            'filename': 'uplift_count_plot.png',
+            'description': 'This count plot displays the number of instances for each uplift category.'
+        },
+        'Uplift Bar Plot': {
+            'filename': 'uplift_bar_plot.png',
+            'description': 'This bar plot represents the average uplift score per category.'
+        },
+        'Decision Tree Plot': {
+            'filename': 'decision_tree_plot.png',
+            'description': 'This decision tree plot visualizes the rules and splits used in the uplift model.'
+        }
+    }
+
+    for plot_title, plot_info in plots.items():
+        altair_saver.save(globals()[plot_title.lower().replace(" ", "_")](plot_data_df), plot_info['filename'])
+
+    # Create a PDF report
+    pdf = CustomPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+
+    # Add cover page
+    pdf.titles("Uplift Model Report", "Subtitle: Additional Information", "Date: 2023-03-19")
+
+    # Add table of contents
+    pdf.chapter_title("Table of Contents")
+    for i, plot_title in enumerate(plots , start=1):
+        pdf.cell(0, 10, f"{i}. {plot_title}", ln=True)
+        pdf.ln(10)
+        # Add plots and descriptions to the report
+    for i, (plot_title, plot_info) in enumerate(plots.items(), start=1):
+        pdf.chapter_title(f"{i}. {plot_title}")
+        pdf.plot_image(plot_info['filename'])
+        pdf.description(plot_info['description'])
+
+    # Save the report as a PDF file
+    report_filename = 'uplift_model_report.pdf'
+    pdf.output(report_filename)
+
+    # Remove temporary plot images
+    for plot_info in plots.values():
+        os.remove(plot_info['filename'])
+
+    return report_filename
+
 
 
 def plot_qini_curve(qini_x, qini_y ,auc):
@@ -473,14 +543,6 @@ def plot_qini_curve(qini_x, qini_y ,auc):
 
     return chart
 
-
-
-
-
-    #st.altair_chart(combined_chart, use_container_width=True)
-
-
- 
 def welcome_page():
     st.title("Welcome to the Uplift Model Platform")
     st.write("""
@@ -572,14 +634,8 @@ def main():
            plot =  plot_qini_curve(qini_x, qini_y, auc)
            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Generate Report':
-            plots_dict = {
-    'Uplift Histogram': altair_saver.save(uplift_histogram(plot_data_df),fmt ='png'),
-    'Uplift Count Plot': altair_saver.save(uplift_count_plot(plot_data_df), fmt ='png'),
-    'Uplift Bar Plot': altair_saver.save(uplift_bar_plot(plot_data_df), fmt='png'),
-    'Decision Tree Plot': altair_saver.save(decision_tree_plot(plot_data_df), fmt='png'),
-    'Download Uplift Category': None  # This plot is not saved as an image
-     }
-            generate_report(plots_dict)
+           report_filename = save_plots_and_generate_report(plot_data_df)
+           st.markdown(f"Download the report")
     elif selected_tab == 'Welcome':
         welcome_page()
     elif selected_tab == "Campaign Visualizations":
