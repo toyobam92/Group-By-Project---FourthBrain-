@@ -654,7 +654,7 @@ def main():
     st.set_page_config(page_title='Uplift Model', page_icon=':bar_chart:')
     st.title('Uplift Model - Campaign Analytics')
     
-    tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis', 'Campaign Results']
+    tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis', 'Campaign Results', 'Uplift Segment']
     selected_tab = st.sidebar.radio('', tabs)
 
     if selected_tab == 'Exploratory Data Analysis':
@@ -701,7 +701,7 @@ def main():
         'Decision Tree Plot',
         'Qini Curve',
         'Uplift by Variable',
-        'Explore and Download Predicted Observations','Generate Report']
+        'Explore and Download Predicted Observations']
         selected_plot = st.selectbox('Select a plot to display:', plot_options) 
         if selected_plot == 'Uplift Histogram':
             plot = uplift_histogram(plot_data_df)
