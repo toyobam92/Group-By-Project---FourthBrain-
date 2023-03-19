@@ -476,47 +476,24 @@ class CustomPDF(FPDF):
 from selenium import webdriver
 
 def save_plots_and_generate_report(plot_data_df):
-    # Define the plot functions and their filenames
+  def save_plots_and_generate_report(plot_data_df):
     plots = {
-        'Uplift Histogram': {'filename': 'uplift_histogram.png', 'function': uplift_histogram},
-        'Uplift Count Plot': {'filename': 'uplift_count_plot.png', 'function': uplift_count_plot},
-        'Uplift Bar Plot': {'filename': 'uplift_bar_plot.png', 'function': uplift_bar_plot},
-        'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'function': decision_tree_plot},
+        'Uplift Histogram': 'uplift_histogram.png',
+        'Uplift Count Plot': 'uplift_count_plot.png',
+        'Uplift Bar Plot': 'uplift_bar_plot.png',
+        'Decision Tree Plot': 'decision_tree_plot.png',
     }
 
-    for plot_title, plot_info in plots.items():
-        chart_function = plot_info['function']
-        if plot_title != 'Decision Tree Plot':
-            chart = chart_function(plot_data_df)
-            spec = json.loads(chart.to_json())
-
-            options = webdriver.ChromeOptions()
-            options.add_argument("--headless")
-            options.add_argument("--disable-gpu")
-            options.add_argument("--no-sandbox")
-            options.add_argument("start-maximized")
-            options.add_argument("disable-infobars")
-            options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--remote-debugging-port=9222")
-            
-            driver = webdriver.Chrome(options=options)
-            driver.set_window_size(1200, 900)
-
-            driver.get("https://vega.github.io/editor/#/custom/vega-lite")
-            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "spec")))
-
-            input_box = driver.find_element_by_id("spec")
-            input_box.clear()
-            input_box.send_keys(json.dumps(spec))
-
-            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "output")))
-            svg = driver.find_element(By.CSS_SELECTOR, '#output .marks').get_attribute('outerHTML')
-
-            with open(plot_info['filename'], "wb") as f:
-                f.write(base64.b64decode(svg.split("base64,")[1]))
-
-            driver.quit()
-
+    # Save the plots as images
+    for plot_title, plot_filename in plots.items():
+        chart_function = globals()[plot_title.lower().replace(" ", "_")]
+        chart = chart_function(plot_data_df)
+        
+        if plot_title == 'Decision Tree Plot':
+            plt.savefig(plot_filename)
+            plt.close()
+        else:
+            chart.save(plot_filename)
 
     # Create the PDF report
     pdf = CustomPDF()
