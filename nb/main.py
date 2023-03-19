@@ -503,13 +503,13 @@ def save_plots_and_generate_report(plot_data_df):
             driver.set_window_size(1200, 900)
 
             driver.get("https://vega.github.io/editor/#/custom/vega-lite")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "spec")))
+            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "spec")))
 
             input_box = driver.find_element_by_id("spec")
             input_box.clear()
             input_box.send_keys(json.dumps(spec))
 
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "output")))
+            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "output")))
             svg = driver.find_element(By.CSS_SELECTOR, '#output .marks').get_attribute('outerHTML')
 
             with open(plot_info['filename'], "wb") as f:
