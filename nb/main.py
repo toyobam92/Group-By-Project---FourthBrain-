@@ -643,6 +643,13 @@ def main():
            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Generate Report':
            report_filename = save_plots_and_generate_report(plot_data_df)
+           with open(report_filename, 'rb') as f:
+                contents = f.read()
+           st.download_button(
+                label="Download Report",
+               data=contents,
+               file_name=report_filename,
+              mime='application/pdf')
            st.markdown(f"Download the report")
     elif selected_tab == 'Welcome':
         welcome_page()
