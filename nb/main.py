@@ -1,4 +1,5 @@
 import streamlit as st
+import altair_viewer
 import json
 from vega import VegaLite
 from selenium import webdriver
@@ -479,14 +480,9 @@ def save_plots_and_generate_report(plot_data_df):
         'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'function': decision_tree_plot},
     }
 
-
     for plot_title, plot_info in plots.items():
         chart_function = plot_info['function']
-        if plot_title == 'Decision Tree Plot':
-            fig = chart_function(plot_data_df)
-            fig.savefig(plot_info['filename'], dpi=300, bbox_inches='tight')
-            plt.close(fig)
-        else:
+        if plot_title != 'Decision Tree Plot':
             chart = chart_function(plot_data_df)
             spec = json.loads(chart.to_json())
 
@@ -500,8 +496,9 @@ def save_plots_and_generate_report(plot_data_df):
             options.add_argument("--remote-debugging-port=9222")
             
             driver = webdriver.Chrome(options=options)
-            VegaLite(spec, renderer='png', webdriver=driver).save(plot_info['filename'])
+            altair_viewer.save(chart, plot_info['filename'], format='png', webdriver=driver)
             driver.quit()
+
     # Create the PDF report
     pdf = CustomPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
