@@ -1,4 +1,8 @@
 import streamlit as st
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import base64
 import altair_viewer
 import json
 from vega import VegaLite
@@ -496,8 +500,23 @@ def save_plots_and_generate_report(plot_data_df):
             options.add_argument("--remote-debugging-port=9222")
             
             driver = webdriver.Chrome(options=options)
-            altair_saver(chart, plot_info['filename'], format='png', webdriver=driver)
+            driver.set_window_size(1200, 900)
+
+            driver.get("https://vega.github.io/editor/#/custom/vega-lite")
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "spec")))
+
+            input_box = driver.find_element_by_id("spec")
+            input_box.clear()
+            input_box.send_keys(json.dumps(spec))
+
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "output")))
+            svg = driver.find_element(By.CSS_SELECTOR, '#output .marks').get_attribute('outerHTML')
+
+            with open(plot_info['filename'], "wb") as f:
+                f.write(base64.b64decode(svg.split("base64,")[1]))
+
             driver.quit()
+
 
     # Create the PDF report
     pdf = CustomPDF()
