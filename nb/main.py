@@ -476,24 +476,21 @@ class CustomPDF(FPDF):
 from selenium import webdriver
 
 def save_plots_and_generate_report(plot_data_df):
-  def save_plots_and_generate_report(plot_data_df):
     plots = {
-        'Uplift Histogram': 'uplift_histogram.png',
-        'Uplift Count Plot': 'uplift_count_plot.png',
-        'Uplift Bar Plot': 'uplift_bar_plot.png',
-        'Decision Tree Plot': 'decision_tree_plot.png',
+        'Uplift Histogram': {'filename': 'uplift_histogram.png', 'func': uplift_histogram},
+        'Uplift Count Plot': {'filename': 'uplift_count_plot.png', 'func': uplift_count_plot},
+        'Uplift Bar Plot': {'filename': 'uplift_bar_plot.png', 'func': uplift_bar_plot},
+        'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'func': plot_decision_tree},
     }
 
     # Save the plots as images
-    for plot_title, plot_filename in plots.items():
-        chart_function = globals()[plot_title.lower().replace(" ", "_")]
-        chart = chart_function(plot_data_df)
-        
+    for plot_title, plot_info in plots.items():
+        chart = plot_info['func'](plot_data_df)
         if plot_title == 'Decision Tree Plot':
-            plt.savefig(plot_filename)
+            plt.savefig(plot_info['filename'])
             plt.close()
         else:
-            chart.save(plot_filename)
+            chart.save(plot_info['filename'])
 
     # Create the PDF report
     pdf = CustomPDF()
@@ -521,6 +518,8 @@ def save_plots_and_generate_report(plot_data_df):
     # Remove the image files
     for plot_info in plots.values():
         os.remove(plot_info['filename'])
+
+    print(f"Report saved as {report_filename}")
 
     return report_filename
 
