@@ -481,15 +481,7 @@ def save_plots_and_generate_report(plot_data_df):
         chart_function = plot_info['function']
         if plot_title != 'Decision Tree Plot':
             chart = chart_function(plot_data_df)
-            options = webdriver.ChromeOptions()
-            options.add_argument("--headless")
-            options.add_argument("--disable-gpu")
-            options.add_argument("--no-sandbox")
-            options.add_argument("start-maximized")
-            options.add_argument("disable-infobars")
-            options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--remote-debugging-port=9222")
-            altair_saver(chart, plot_info['filename'], fmt='png', method='selenium', webdriver_options=options)
+            altair_saver(chart, plot_info['filename'], fmt='png')
 
     # Create the PDF report
     pdf = CustomPDF()
