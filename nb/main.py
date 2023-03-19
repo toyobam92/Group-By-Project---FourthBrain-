@@ -486,7 +486,9 @@ def save_plots_and_generate_report(plot_data_df):
     }
 
     for plot_title, plot_info in plots.items():
-        altair_saver.save(globals()[plot_title.lower().replace(" ", "_")](plot_data_df), plot_info['filename'])
+        chart_function = globals()[plot_title.lower().replace(" ", "_")]
+        chart = chart_function(plot_data_df)
+        altair_saver(chart, plot_info['filename'])
 
     # Create a PDF report
     pdf = CustomPDF()
