@@ -489,7 +489,7 @@ def save_plots_and_generate_report(plot_data_df):
             options.add_argument("disable-infobars")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--remote-debugging-port=9222")
-            altair_saver.save(chart, plot_info['filename'], fmt='png', method='selenium', webdriver_options=options)
+            altair_saver(chart, plot_info['filename'], fmt='png', method='selenium', webdriver_options=options)
 
     # Create the PDF report
     pdf = CustomPDF()
