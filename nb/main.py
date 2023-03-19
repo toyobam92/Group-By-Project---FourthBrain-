@@ -480,7 +480,7 @@ def save_plots_and_generate_report(plot_data_df):
         'Uplift Histogram': {'filename': 'uplift_histogram.png', 'func': uplift_histogram},
         'Uplift Count Plot': {'filename': 'uplift_count_plot.png', 'func': uplift_count_plot},
         'Uplift Bar Plot': {'filename': 'uplift_bar_plot.png', 'func': uplift_bar_plot},
-        'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'func': plot_decision_tree},
+        'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'func': decision_tree_plot},
     }
 
     # Save the plots as images
