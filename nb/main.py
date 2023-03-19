@@ -603,7 +603,7 @@ def save_plots_and_generate_report(plot_data_df, driver):
 
 def plot_qini_curve(qini_x, qini_y ,y_test, trmnt_test, plot_data_df):
     
-    auc = uplift_auc_score(y_test, pd.Series( plot_data_df['uplift_score'] ), trmnt_test)
+    auc_val = uplift_auc_score(y_test, pd.Series( plot_data_df['uplift_score'] ), trmnt_test)
     
     qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y})
 
@@ -622,9 +622,9 @@ def plot_qini_curve(qini_x, qini_y ,y_test, trmnt_test, plot_data_df):
         color=alt.Color('Line', legend=alt.Legend(title='Lines')),
         strokeDash=alt.condition(alt.datum.Line == 'Qini', alt.value([1, 0]), alt.value([3, 3]))
     ).properties(
-        title=f'Qini Curve (AUC: {auc:.4f})'
+        title=f'Qini Curve (AUC: {auc_val})'
     ).interactive()
-
+#:.4f
     return chart
 
 def welcome_page():
