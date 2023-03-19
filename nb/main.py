@@ -1,4 +1,5 @@
 import streamlit as st
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -502,7 +503,8 @@ def save_plots_and_generate_report(plot_data_df):
             plt.savefig(plot_info['filename'])
             plt.close()
         else:
-            chart.save(plot_info['filename'])
+            driver = webdriver.Chrome()
+            chart.save(plot_info['filename'], driver = driver)
 
     # Create the PDF report
     pdf = CustomPDF()
