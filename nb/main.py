@@ -395,6 +395,7 @@ def decision_tree_plot(df):
 
     return fig
 
+
 def create_uplift_cat_countplot(df):
     variable = st.selectbox('Select variable', ['job_admin.', 'job_blue-collar',
         'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired',
@@ -433,6 +434,47 @@ def explore_predicted_observations(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
 
+def generate_report(df):
+    # Create plots
+    hist = uplift_histogram(df)
+    count_plot = uplift_count_plot(df)
+    bar_plot = uplift_bar_plot(df)
+    tree_plot = decision_tree_plot(df)
+
+    # Create HTML report
+    report_html = f"""
+    <html>
+    <head>
+    <style>
+    /* Add styles to your report here */
+    </style>
+    </head>
+    <body>
+    <h1>Uplift Model Report</h1>
+    <h2>Uplift Histogram</h2>
+    {hist.to_html()}
+    <h2>Uplift Count Plot</h2>
+    {count_plot.to_html()}
+    <h2>Uplift Bar Plot</h2>
+    {bar_plot.to_html()}
+    <h2>Decision Tree Plot</h2>
+    {tree_plot.to_html()}
+    </body>
+    </html>
+    """
+
+    # Save report to file
+    with open('uplift_report.html', 'w') as f:
+        f.write(report_html)
+
+    return 'uplift_report.html'
+
+# In your Streamlit app, add a button to generate the report and a download button to download the report file
+    if st.button('Generate Report'):
+        report_file = generate_report(df, quartile_values)
+        st.download_button('Download Report', data=open(report_file, 'rb').read(), file_name='uplift')
+
+
 def plot_qini_curve(qini_x, qini_y ,auc):
     
     qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y})
@@ -453,10 +495,37 @@ def plot_qini_curve(qini_x, qini_y ,auc):
         strokeDash=alt.condition(alt.datum.Line == 'Qini', alt.value([1, 0]), alt.value([3, 3]))
     ).properties(
         title=f'Qini Curve (AUC: {auc:.4f})'
-    )
+    ).interactive()
 
     return chart
 
+
+
+def plot_qini_curve(y_true, uplift, treatment):
+    qini_x, qini_y = qini_curve(y_true, uplift, treatment)
+    _, perfect_y = qini_curve(y_true, y_true * treatment, treatment)
+    auc = uplift_auc_score(y_true, uplift, treatment)
+
+    qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y, 'Perfect': perfect_y})
+
+    # Calculate random line
+    qini_data['Random'] = qini_data['Percentage of data targeted'] * qini_y[-1] / qini_x[-1]
+
+    # Create a DataFrame for each line with an additional 'Line' column
+    qini_curve_data = qini_data.melt(id_vars=['Percentage of data targeted'], value_vars=['Qini', 'Random', 'Perfect'],
+                                      var_name='Line', value_name='Uplift')
+
+    # Create the line chart with a legend
+    chart = alt.Chart(qini_curve_data).mark_line().encode(
+        x='Percentage of data targeted',
+        y='Uplift',
+        color=alt.Color('Line', legend=alt.Legend(title='Lines')),
+        strokeDash=alt.condition(alt.datum.Line == 'Qini', alt.value([1, 0]), alt.value([3, 3]))
+    ).properties(
+        title=f'Qini Curve (AUC: {auc:.4f})'
+    ).interactive()
+
+    return chart
 
 
     #st.altair_chart(combined_chart, use_container_width=True)
@@ -529,7 +598,7 @@ def main():
         'Decision Tree Plot',
         'Qini Curve',
         'Uplift by Variable',
-        'Explore and Download Predicted Observations']
+        'Explore and Download Predicted Observations', 'Generate Report']
         selected_plot = st.selectbox('Select a plot to display:', plot_options) 
         if selected_plot == 'Uplift Histogram':
             plot = uplift_histogram(plot_data_df)
@@ -553,6 +622,8 @@ def main():
         elif selected_plot == 'Qini Curve':   
            plot =  plot_qini_curve(qini_x, qini_y, auc)
            st.altair_chart(plot, use_container_width=True)
+        elif selected_plot == 'Generate Report':
+            generate_report(plot_data_df)
     elif selected_tab == 'Welcome':
         welcome_page()
     elif selected_tab == "Campaign Visualizations":
