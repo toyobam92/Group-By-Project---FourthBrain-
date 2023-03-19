@@ -1,4 +1,5 @@
 import streamlit as st
+from selenium import webdriver
 from datetime import datetime
 import os
 import pandas as pd
@@ -465,68 +466,60 @@ class CustomPDF(FPDF):
         self.multi_cell(190, 10, txt=text, align="L")
         self.ln(5)
 
+from selenium import webdriver
+
 def save_plots_and_generate_report(plot_data_df):
-    # Save plots as images and create descriptions
+    # Define the plot functions and their filenames
     plots = {
-        'Uplift Histogram': {
-            'filename': 'uplift_histogram.png',
-            'description': 'This histogram shows the distribution of uplift scores across different categories.'
-        },
-        'Uplift Count Plot': {
-            'filename': 'uplift_count_plot.png',
-            'description': 'This count plot displays the number of instances for each uplift category.'
-        },
-        'Uplift Bar Plot': {
-            'filename': 'uplift_bar_plot.png',
-            'description': 'This bar plot represents the average uplift score per category.'
-        },
-        'Decision Tree Plot': {
-            'filename': 'decision_tree_plot.png',
-            'description': 'This decision tree plot visualizes the rules and splits used in the uplift model.'
-        }
+        'Uplift Histogram': {'filename': 'uplift_histogram.png', 'function': uplift_histogram},
+        'Uplift Count Plot': {'filename': 'uplift_count_plot.png', 'function': uplift_count_plot},
+        'Uplift Bar Plot': {'filename': 'uplift_bar_plot.png', 'function': uplift_bar_plot},
+        'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'function': decision_tree_plot},
     }
 
     for plot_title, plot_info in plots.items():
-        if plot_title == 'Decision Tree Plot':
-            fig = decision_tree_plot(plot_data_df)
-            fig.savefig(plot_info['filename'])
-            plt.close(fig)
-        else:
-            chart_function = globals()[plot_title.lower().replace(" ", "_")]
+        chart_function = plot_info['function']
+        if plot_title != 'Decision Tree Plot':
             chart = chart_function(plot_data_df)
-            altair_saver(chart, plot_info['filename'], fmt = 'png')
+            options = webdriver.ChromeOptions()
+            options.add_argument("--headless")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--no-sandbox")
+            options.add_argument("start-maximized")
+            options.add_argument("disable-infobars")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--remote-debugging-port=9222")
+            altair_saver.save(chart, plot_info['filename'], fmt='png', method='selenium', webdriver_options=options)
 
-
-    # Create a PDF report
+    # Create the PDF report
     pdf = CustomPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
 
     # Add cover page
-     # Add cover page
     today = datetime.now().strftime("%Y-%m-%d")
     pdf.titles("Uplift Model Report", "Subtitle: Additional Information", f"Date: {today}")
 
     # Add table of contents
     pdf.chapter_title("Table of Contents")
-    for i, plot_title in enumerate(plots , start=1):
-        pdf.cell(0, 10, f"{i}. {plot_title}", ln=True)
-        pdf.ln(10)
-        # Add plots and descriptions to the report
-    for i, (plot_title, plot_info) in enumerate(plots.items(), start=1):
-        pdf.chapter_title(f"{i}. {plot_title}")
-        pdf.plot_image(plot_info['filename'])
-        pdf.description(plot_info['description'])
+    for i, plot_title in enumerate(plots):
+        pdf.cell(0, 5, f"{i + 1}. {plot_title}", ln=True)
 
-    # Save the report as a PDF file
-    report_filename = 'uplift_model_report.pdf'
+    # Add plots to the PDF report
+    for i, (plot_title, plot_info) in enumerate(plots.items()):
+        pdf.chapter_title(f"{i + 1}. {plot_title}")
+        pdf.image(plot_info['filename'], w=pdf.get_page_width() - 40, h=0)
+
+    # Save the PDF report
+    report_filename = "uplift_model_report.pdf"
     pdf.output(report_filename)
 
-    # Remove temporary plot images
+    # Remove the image files
     for plot_info in plots.values():
         os.remove(plot_info['filename'])
 
     return report_filename
+
 
 
 
