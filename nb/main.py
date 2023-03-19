@@ -496,7 +496,7 @@ def save_plots_and_generate_report(plot_data_df):
             options.add_argument("--remote-debugging-port=9222")
             
             driver = webdriver.Chrome(options=options)
-            altair_saver.save(chart, plot_info['filename'], format='png', webdriver=driver)
+            altair_saver(chart, plot_info['filename'], format='png', webdriver=driver)
             driver.quit()
 
     # Create the PDF report
