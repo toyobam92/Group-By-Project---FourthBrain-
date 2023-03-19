@@ -31,10 +31,9 @@ import plotly.figure_factory as ff
 import graphviz
 from io import BytesIO
 from PIL import Image
-from sklift.metrics import qini_curve,uplift_auc_score
+from sklift.metrics import qini_curve
+from sklift.metrics import uplift_auc_score
 from fpdf import FPDF
-alt.data_transformers.disable_max_rows()
-
 
 @st.cache_data
 def load_data():
@@ -350,12 +349,9 @@ def clean():
     label_names = ['Sleeping Dogs', 'Lost Causes', 'Sure Things', 'Persuadables']
     plot_data_df['uplift_category'] = pd.qcut(plot_data_df['uplift_score'], q=quartile_values, labels=label_names, duplicates='drop')
     
-    qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'] , trmnt_test)
+    qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'], trmnt_test)
     
-    auc = uplift_auc_score(y_test,pd.Series( plot_data_df['uplift_score'] ), trmnt_test)
-
-    
-    return plot_data_df, (qini_x, qini_y), auc
+    return plot_data_df, (qini_x, qini_y), y_test, trmnt_test
 
 
 def uplift_histogram(df):
@@ -474,7 +470,6 @@ class CustomPDF(FPDF):
         self.multi_cell(190, 10, txt=text, align="L")
         self.ln(5)
 
-from selenium import webdriver
 def save_plots_and_generate_report(plot_data_df):
     plots = {
         'Uplift Histogram': {
@@ -542,13 +537,8 @@ def save_plots_and_generate_report(plot_data_df):
     for plot_info in plots.values():
         os.remove(plot_info['filename'])
         
-
-
-
     b64_pdf = base64.b64encode(report_filename.read()).decode('utf-8')
-         # Create download link
     href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="report.pdf">Download PDF</a>'
-
     return href
 
 def save_plots_and_generate_report(plot_data_df, driver):
@@ -611,7 +601,9 @@ def save_plots_and_generate_report(plot_data_df, driver):
     return report_filename
 
 
-def plot_qini_curve(qini_x, qini_y ,auc):
+def plot_qini_curve(qini_x, qini_y ,y_test, trmnt_test, plot_data_df):
+    
+    auc = uplift_auc_score(y_test, pd.Series( plot_data_df['uplift_score'] ), trmnt_test)
     
     qini_data = pd.DataFrame({'Percentage of data targeted': qini_x, 'Qini': qini_y})
 
@@ -693,7 +685,7 @@ def main():
             bar_chart = create_bar_chart(df)
             st.altair_chart(bar_chart, use_container_width=True)
     elif selected_tab == 'Uplift Segment':
-        plot_data_df, (qini_x, qini_y), auc = clean()
+        plot_data_df, (qini_x, qini_y), y_test, trmnt_test = clean()
         plot_options = [
         'Uplift Histogram',
         'Uplift Count Plot',
@@ -723,7 +715,7 @@ def main():
             st.write(category_df)
             st.markdown(href, unsafe_allow_html=True)
         elif selected_plot == 'Qini Curve':   
-           plot =  plot_qini_curve(qini_x, qini_y, auc)
+           plot =  plot_qini_curve(qini_x, qini_y, y_test, trmnt_test, plot_data_df)
            st.altair_chart(plot, use_container_width=True)
         #elif selected_plot == 'Generate Report':
           # href = save_plots_and_generate_report(plot_data_df)
