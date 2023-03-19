@@ -474,18 +474,30 @@ class CustomPDF(FPDF):
         self.ln(5)
 
 from selenium import webdriver
-
 def save_plots_and_generate_report(plot_data_df):
     plots = {
-        'Uplift Histogram': {'filename': 'uplift_histogram.png', 'func': uplift_histogram},
-        'Uplift Count Plot': {'filename': 'uplift_count_plot.png', 'func': uplift_count_plot},
-        'Uplift Bar Plot': {'filename': 'uplift_bar_plot.png', 'func': uplift_bar_plot},
-        'Decision Tree Plot': {'filename': 'decision_tree_plot.png', 'func': decision_tree_plot},
+        'Uplift Histogram': {
+            'filename': 'uplift_histogram.png',
+            'func': uplift_histogram,
+        },
+        'Uplift Count Plot': {
+            'filename': 'uplift_count_plot.png',
+            'func': uplift_count_plot,
+        },
+        'Uplift Bar Plot': {
+            'filename': 'uplift_bar_plot.png',
+            'func': uplift_bar_plot,
+        },
+        'Decision Tree Plot': {
+            'filename': 'decision_tree_plot.png',
+            'func': decision_tree_plot,
+        },
     }
 
     # Save the plots as images
     for plot_title, plot_info in plots.items():
         chart = plot_info['func'](plot_data_df)
+        
         if plot_title == 'Decision Tree Plot':
             plt.savefig(plot_info['filename'])
             plt.close()
@@ -519,16 +531,12 @@ def save_plots_and_generate_report(plot_data_df):
     for plot_info in plots.values():
         os.remove(plot_info['filename'])
 
-    print(f"Report saved as {report_filename}")
-    
+
     b64_pdf = base64.b64encode(report_filename.read()).decode('utf-8')
          # Create download link
     href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="report.pdf">Download PDF</a>'
 
     return href
-
-
-
 
 def plot_qini_curve(qini_x, qini_y ,auc):
     
