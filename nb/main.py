@@ -1,13 +1,14 @@
 import streamlit as st
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
 import base64
 import altair_viewer
 import json
 from vega import VegaLite
-from selenium import webdriver
+
 from datetime import datetime
 import os
 import pandas as pd
@@ -503,7 +504,16 @@ def save_plots_and_generate_report(plot_data_df):
             plt.savefig(plot_info['filename'])
             plt.close()
         else:
-            driver = webdriver.Chrome()
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("window-size=1400,1500")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--no-sandbox")
+            options.add_argument("start-maximized")
+            options.add_argument("enable-automation")
+            options.add_argument("--disable-infobars")
+            options.add_argument("--disable-dev-shm-usage")
+            driver = webdriver.Chrome(options=options)
             chart.save(plot_info['filename'], driver = driver)
 
     # Create the PDF report
