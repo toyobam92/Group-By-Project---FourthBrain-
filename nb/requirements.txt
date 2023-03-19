@@ -1,4 +1,5 @@
 streamlit
+altair_saver
 pandas
 altair
 boto3
@@ -13,7 +14,6 @@ base64
 plotly
 graphviz
 PIL
-altair_saver
 Pillow
 
 

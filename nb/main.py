@@ -20,6 +20,7 @@ import graphviz
 from io import BytesIO
 from PIL import Image
 from sklift.metrics import qini_curve,uplift_auc_score
+alt.data_transformers.disable_max_rows()
 
 
 @st.cache_data
