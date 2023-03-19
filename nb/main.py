@@ -352,7 +352,7 @@ def clean():
     
     qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'] , trmnt_test)
     
-    auc = uplift_auc_score(y_test, plot_data_df['uplift_score'] , trmnt_test)
+    auc = uplift_auc_score(y_test,pd.Series( plot_data_df['uplift_score'] ), trmnt_test)
 
     
     return plot_data_df, (qini_x, qini_y), auc
@@ -450,7 +450,6 @@ def explore_predicted_observations(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="{category.lower()}.csv">Download {category} Data</a>'
     return category,href, category_df
 
-from fpdf import FPDF
 
 class CustomPDF(FPDF):
     def titles(self, title, subtitle, date):
@@ -542,6 +541,8 @@ def save_plots_and_generate_report(plot_data_df):
     # Remove the image files
     for plot_info in plots.values():
         os.remove(plot_info['filename'])
+        
+
 
 
     b64_pdf = base64.b64encode(report_filename.read()).decode('utf-8')
@@ -549,6 +550,66 @@ def save_plots_and_generate_report(plot_data_df):
     href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="report.pdf">Download PDF</a>'
 
     return href
+
+def save_plots_and_generate_report(plot_data_df, driver):
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("window-size=1400,1500")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("start-maximized")
+    options.add_argument("enable-automation")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(options=options)
+
+    plots = {
+        'Uplift Histogram': {'func': uplift_histogram, 'filename': 'uplift_histogram.png'},
+        'Uplift Count Plot': {'func': uplift_count_plot, 'filename': 'uplift_count_plot.png'},
+        'Uplift Bar Plot': {'func': uplift_bar_plot, 'filename': 'uplift_bar_plot.png'},
+        'Decision Tree Plot': {'func': decision_tree_plot, 'filename': 'decision_tree_plot.png'}
+    }
+
+    # Save the plots as images
+    for plot_title, plot_info in plots.items():
+        chart_function = plot_info['func']
+        chart = chart_function(plot_data_df)
+        
+        if plot_title == 'Decision Tree Plot':
+            plt.savefig(plot_info['filename'])
+            plt.close()
+        else:
+            chart.save(plot_info['filename'], driver=driver)
+
+    # Create the PDF report
+    pdf = CustomPDF(driver)
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+
+    # Add cover page
+    today = datetime.now().strftime("%Y-%m-%d")
+    pdf.titles("Uplift Model Report", "Subtitle: Additional Information", f"Date: {today}")
+
+    # Add table of contents
+    pdf.chapter_title("Table of Contents")
+    for i, plot_title in enumerate(plots):
+        pdf.cell(0, 5, f"{i + 1}. {plot_title}", ln=True)
+
+    # Add plots to the PDF report
+    for i, (plot_title, plot_info) in enumerate(plots.items()):
+        pdf.chapter_title(f"{i + 1}. {plot_title}")
+        pdf.image(plot_info['filename'], w=pdf.get_page_width() - 40, h=0)
+
+    # Save the PDF report
+    report_filename = "uplift_model_report.pdf"
+    pdf.output(report_filename)
+
+    # Remove the image files
+    for plot_info in plots.values():
+        os.remove(plot_info['filename'])
+
+    return report_filename
+
 
 def plot_qini_curve(qini_x, qini_y ,auc):
     
@@ -593,7 +654,7 @@ def main():
     st.set_page_config(page_title='Uplift Model', page_icon=':bar_chart:')
     st.title('Uplift Model - Campaign Analytics')
     
-    tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis', 'Campaign Results', 'Uplift Segment']
+    tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis', 'Campaign Results']
     selected_tab = st.sidebar.radio('', tabs)
 
     if selected_tab == 'Exploratory Data Analysis':
@@ -632,7 +693,7 @@ def main():
             bar_chart = create_bar_chart(df)
             st.altair_chart(bar_chart, use_container_width=True)
     elif selected_tab == 'Uplift Segment':
-        plot_data_df, (qini_x, qini_y),auc = clean()
+        plot_data_df, (qini_x, qini_y), auc = clean()
         plot_options = [
         'Uplift Histogram',
         'Uplift Count Plot',
@@ -664,9 +725,9 @@ def main():
         elif selected_plot == 'Qini Curve':   
            plot =  plot_qini_curve(qini_x, qini_y, auc)
            st.altair_chart(plot, use_container_width=True)
-        elif selected_plot == 'Generate Report':
-           href = save_plots_and_generate_report(plot_data_df)
-           st.markdown(href, unsafe_allow_html=True)
+        #elif selected_plot == 'Generate Report':
+          # href = save_plots_and_generate_report(plot_data_df)
+          # st.markdown(href, unsafe_allow_html=True)
     elif selected_tab == 'Welcome':
         welcome_page()
     elif selected_tab == "Campaign Visualizations":
