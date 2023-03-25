@@ -40,6 +40,11 @@ app: contains the app.py files for deployment.
 
 To get started with our project, clone the repository and install the required dependencies. The dependencies are listed in the requirements.txt file.
 
+
+### Link to Application
+
+[Link to Demo 1](https://mazon1-apps-appapp-8sfsyx.streamlit.app/)
+
 ### Team Members
 
 Our team consists of the following members:
@@ -48,8 +53,5 @@ Our team consists of the following members:
 
 [Uchenna Mgbaja](https://www.linkedin.com/in/marianmgbaja/)
 
-### Link to Application
 
-
-[Link to Demo 1](https://mazon1-apps-appapp-8sfsyx.streamlit.app/)
 
