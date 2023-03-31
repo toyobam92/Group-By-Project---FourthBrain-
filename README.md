@@ -31,6 +31,7 @@ Prepare your dataset in CSV format with the following columns:
 treatment_tag: A binary variable indicating whether a customer received the treatment (1) or not (0).
 conversion: A binary variable indicating the target outcome, such as customer conversion (1) or not (0).
 Additional features that may influence the outcome (e.g., demographics, purchase history).
+
 Run the experimentation notebook Uplift_model.ipynb on Jupyter using the MLRun framework. This notebook will train the model on the data and save the trained model in the mlrun folder. The model will then be moved to an S3 bucket for storage and deployment purposes. The training and testing datasets will be saved in CSV format under the dat folder.
 
 Deploy the main.py script on an AWS instance to run the Streamlit app, which provides an interactive interface to for the campaign and model results 
@@ -38,7 +39,7 @@ Deploy the main.py script on an AWS instance to run the Streamlit app, which pro
 ## Customization
 You can customize the uplift model by modifying the settings in the Uplift_model.ipynb notebook, such as:
 
-Choosing different uplift modeling techniques, such as Two-Model, Solo-Model and Class Transformation moel and specifying the underlying classifier (e.g., logistic regression, random forest,XGBoost).
+Choosing different uplift modeling techniques, such as Two-Model, Solo-Model and Class Transformation model and specifying the underlying classifier (e.g., logistic regression, random forest,XGBoost).
 
 Defining the performance metrics used to evaluate the model, such as area under the uplift curve (AUUC), Qini coefficient, and response rate.
 
