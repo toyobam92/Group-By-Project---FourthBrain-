@@ -49,6 +49,13 @@ The model will output various performance metrics, including AUUC, Qini coeffici
 ## Demo
 Visit the live demo of the Streamlit app deployed on AWS: http://3.235.28.171:8501/. The app allows  visualize the results interactively the campaign results and model results interactively 
 
+## Team Members
+Our team consists of the following members:
+
+Toyosi Bamidele
+
+Uchenna Mgbaja
+
 ## Contributing
 We welcome contributions to improve and extend the functionality of this project. If you're interested in contributing, please fork the repository and create a pull request with your changes.
 
