@@ -1,4 +1,4 @@
-#Group By Project - Customizable Uplift Model
+# Group By Project - Customizable Uplift Model
 GitHub license
 
 This repository contains the source code for a customizable uplift model developed as part of the Group By Project at FourthBrain. The purpose of this project is to provide an easy-to-use framework for uplift modeling, which can be applied to various business use cases such as targeted marketing, customer retention, and revenue optimization.
