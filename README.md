@@ -34,7 +34,7 @@ Additional features that may influence the outcome (e.g., demographics, purchase
 
 Run the experimentation notebook Uplift_model.ipynb on Jupyter using the MLRun framework. This notebook will train the model on the data and save the trained model in the mlrun folder. The model will then be moved to an S3 bucket for storage and deployment purposes. The training and testing datasets will be saved in CSV format under the dat folder.
 
-Deploy the main.py script on an AWS instance to run the Streamlit app, which provides an interactive interface to for the campaign and model results 
+Deploy the main.py script on an AWS instance to run the Streamlit app using streamlit run main.py, which provides an interactive interface to for the campaign and model results 
 
 ## Customization
 You can customize the uplift model by modifying the settings in the Uplift_model.ipynb notebook, such as:
