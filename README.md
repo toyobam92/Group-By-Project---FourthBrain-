@@ -1,9 +1,9 @@
-Group By Project - Customizable Uplift Model
+#Group By Project - Customizable Uplift Model
 GitHub license
 
 This repository contains the source code for a customizable uplift model developed as part of the Group By Project at FourthBrain. The purpose of this project is to provide an easy-to-use framework for uplift modeling, which can be applied to various business use cases such as targeted marketing, customer retention, and revenue optimization.
 
-Table of Contents
+##Table of Contents
 Introduction
 Installation
 Usage
@@ -15,16 +15,12 @@ License
 Introduction
 Uplift modeling is a sub-field of machine learning that focuses on estimating the causal impact of a treatment (such as a marketing campaign) on a specific outcome (such as customer conversion). This model aims to predict the difference in the outcome between the treated and control groups, helping businesses make informed decisions about which customers to target with their campaigns.
 
-Installation
+##Installation
 To get started, clone the repository to your local machine using the following command:
 
-bash
-Copy code
-git clone https://github.com/toyobam92/Group-By-Project---FourthBrain-/tree/final/nb.git
+git clone https://github.com/toyobam92/Group-By-Project---FourthBrain-/tree/final/.git
 After cloning the repository, navigate to the project directory and install the required dependencies using the following command:
 
-bash
-Copy code
 pip install -r requirements.txt
 Usage
 To run the customizable uplift model on your data, follow these steps:
@@ -46,14 +42,6 @@ Defining the performance metrics used to evaluate the model, such as area under 
 Results and Evaluation
 The model will output various performance metrics, including AUUC, Qini coefficient, and response rate, to help you assess the effectiveness of the uplift model. Additionally, the results will be visualized using charts to facilitate interpretation.
 
-Demo
-Visit the live demo of the Streamlit app deployed on AWS: http://3.235.28.171:8501/. The app allows you to upload your
-
-
-
-
-Toyosi Bami
-start ONLY FROM Demo
 Demo
 Visit the live demo of the Streamlit app deployed on AWS: http://3.235.28.171:8501/. The app allows you to upload your data, customize the model settings, and visualize the results interactively.
 
