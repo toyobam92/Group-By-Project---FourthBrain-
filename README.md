@@ -45,6 +45,8 @@ To get started with our project, clone the repository and install the required d
 
 [Link to Demo 1](https://mazon1-apps-appapp-8sfsyx.streamlit.app/)
 
+[Link to Demo 2]( https://mazon1-apps-appfinaluplift-c9w4hl.streamlit.app/)
+
 ### Team Members
 
 Our team consists of the following members:
