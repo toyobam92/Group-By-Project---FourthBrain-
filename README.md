@@ -3,14 +3,14 @@
 This repository contains the source code for a customizable uplift model platform developed as part of the Group By Project at FourthBrain. The purpose of this project is to provide an easy-to-use framework for uplift modeling, which can be applied to various business use cases such as targeted marketing, customer retention, and revenue optimization.
 
 ## Table of Contents
-Introduction
-Installation
-Usage
-Customization
-Results and Evaluation
-Demo
-Contributing
-License
+### Introduction
+### Installation
+### Usage
+### Customization
+### Results and Evaluation
+### Demo
+### Contributing
+### License
 
 ## Introduction
 Uplift modeling is a sub-field of machine learning that focuses on estimating the causal impact of a treatment (such as a marketing campaign) on a specific outcome (such as customer conversion). This model aims to predict the difference in the outcome between the treated and control groups, helping businesses make informed decisions about which customers to target with their campaigns.
